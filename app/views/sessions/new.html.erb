@@ -1,0 +1,37 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div class="text-center">
+      <div class="flex justify-center">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-full">
+          <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+      </div>
+      <h2 class="mt-6 text-4xl font-extrabold text-white">BiDesk</h2>
+      <p class="mt-2 text-sm text-gray-300">Sistema de gestão para sua empresa de bilhar</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-2xl p-8 space-y-6">
+      <%= form_with url: login_path, local: true, class: "space-y-6" do |f| %>
+        <div>
+          <%= f.label :password, "Senha", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.password_field :password, 
+              class: "appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm",
+              placeholder: "Digite sua senha",
+              required: true,
+              autofocus: true %>
+        </div>
+
+        <div>
+          <%= f.submit "Entrar", class: "group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition transform hover:scale-105" %>
+        </div>
+      <% end %>
+    </div>
+
+    <p class="text-center text-sm text-gray-400">
+      Acesso restrito ao administrador
+    </p>
+  </div>
+</div>
+

@@ -1,0 +1,62 @@
+  <div class="mb-8 flex justify-between items-center">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Manutenção - <%= @manutencao.equipamento %></h1>
+      <p class="mt-2 text-gray-600">Detalhes da manutenção</p>
+    </div>
+    <div class="flex space-x-3">
+      <%= link_to edit_manutencao_path(@manutencao), class: "inline-flex items-center px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition" do %>
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+        </svg>
+        Editar
+      <% end %>
+      <%= link_to manutencao_index_path, class: "inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition" do %>
+        Voltar
+      <% end %>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-md p-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Equipamento</label>
+        <p class="text-lg font-semibold text-gray-900"><%= @manutencao.equipamento %></p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Status</label>
+        <% status_colors = {
+          "pendente" => "bg-yellow-100 text-yellow-800",
+          "em_andamento" => "bg-blue-100 text-green-800",
+          "concluida" => "bg-green-100 text-green-800",
+          "cancelada" => "bg-red-100 text-red-800"
+        } %>
+        <span class="inline-block px-3 py-1 text-sm font-medium rounded-full <%= status_colors[@manutencao.status] || 'bg-gray-100 text-gray-800' %>">
+          <%= @manutencao.status.humanize %>
+        </span>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Data</label>
+        <p class="text-lg font-semibold text-gray-900"><%= format_date(@manutencao.data) %></p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Custo</label>
+        <p class="text-lg font-semibold text-gray-900"><%= @manutencao.custo ? format_currency(@manutencao.custo) : "-" %></p>
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-gray-500 mb-1">Descrição</label>
+        <p class="text-gray-900 whitespace-pre-wrap"><%= @manutencao.descricao %></p>
+      </div>
+
+      <% if @manutencao.observacoes.present? %>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-500 mb-1">Observações</label>
+          <p class="text-gray-900 whitespace-pre-wrap"><%= @manutencao.observacoes %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

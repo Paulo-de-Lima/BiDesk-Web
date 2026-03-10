@@ -1,0 +1,186 @@
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+    <p class="mt-2 text-gray-600">Visão geral da sua empresa de bilhar</p>
+  </div>
+
+  <!-- Cards de Estatísticas -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Total de Clientes</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2"><%= @total_clientes %></p>
+        </div>
+        <div class="bg-green-100 p-3 rounded-full">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Saldo do Mês</p>
+          <p class="text-3xl font-bold <%= @saldo_mes >= 0 ? 'text-green-600' : 'text-red-600' %> mt-2">
+            <%= format_currency(@saldo_mes) %>
+          </p>
+        </div>
+        <div class="bg-green-100 p-3 rounded-full">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Produtos em Estoque</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2"><%= @total_produtos %></p>
+          <% if @produtos_baixo_estoque > 0 %>
+            <p class="text-sm text-red-600 mt-1"><%= @produtos_baixo_estoque %> com estoque baixo</p>
+          <% end %>
+        </div>
+        <div class="bg-yellow-100 p-3 rounded-full">
+          <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Manutenções Pendentes</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2"><%= @manutencoes_pendentes %></p>
+        </div>
+        <div class="bg-red-100 p-3 rounded-full">
+          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráficos e Tabelas -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Resumo Financeiro -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Resumo Financeiro do Mês</h2>
+      <div class="space-y-4">
+        <div class="flex justify-between items-center p-4 bg-green-50 rounded-lg">
+          <span class="font-medium text-gray-700">Receitas</span>
+          <span class="text-xl font-bold text-green-600"><%= format_currency(@receitas_mes) %></span>
+        </div>
+        <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg">
+          <span class="font-medium text-gray-700">Despesas</span>
+          <span class="text-xl font-bold text-red-600"><%= format_currency(@despesas_mes) %></span>
+        </div>
+        <div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+          <span class="font-bold text-gray-900">Saldo</span>
+          <span class="text-2xl font-bold <%= @saldo_mes >= 0 ? 'text-green-600' : 'text-red-600' %>">
+            <%= format_currency(@saldo_mes) %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações Rápidas -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Ações Rápidas</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <%= link_to new_cliente_path, class: "p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-center" do %>
+          <svg class="w-8 h-8 text-green-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <p class="text-sm font-medium text-gray-700">Novo Cliente</p>
+        <% end %>
+        <%= link_to new_estoque_path, class: "p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition text-center" do %>
+          <svg class="w-8 h-8 text-yellow-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <p class="text-sm font-medium text-gray-700">Novo Produto</p>
+        <% end %>
+        <%= link_to new_financeiro_path, class: "p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-center" do %>
+          <svg class="w-8 h-8 text-green-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <p class="text-sm font-medium text-gray-700">Nova Transação</p>
+        <% end %>
+        <%= link_to new_manutencao_path, class: "p-4 bg-red-50 hover:bg-red-100 rounded-lg transition text-center" do %>
+          <svg class="w-8 h-8 text-red-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <p class="text-sm font-medium text-gray-700">Nova Manutenção</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabelas Recentes -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Últimas Transações -->
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-900">Últimas Transações</h2>
+        <%= link_to financeiro_index_path, class: "text-sm text-green-600 hover:text-green-800" do %>
+          Ver todas →
+        <% end %>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Descrição</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% if @ultimas_transacoes.any? %>
+              <% @ultimas_transacoes.each do |transacao| %>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-4 py-3 text-sm text-gray-900"><%= format_date(transacao.data) %></td>
+                  <td class="px-4 py-3 text-sm text-gray-900"><%= transacao.descricao %></td>
+                  <td class="px-4 py-3 text-sm font-medium <%= transacao.tipo == 'receita' ? 'text-green-600' : 'text-red-600' %>">
+                    <%= transacao.tipo == 'receita' ? '+' : '-' %><%= format_currency(transacao.valor) %>
+                  </td>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="3" class="px-4 py-8 text-center text-gray-500">Nenhuma transação registrada</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Últimos Clientes -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-900">Últimos Clientes</h2>
+        <%= link_to clientes_path, class: "text-sm text-green-600 hover:text-green-800" do %>
+          Ver todos →
+        <% end %>
+      </div>
+      <div class="space-y-3">
+        <% if @ultimos_clientes.any? %>
+          <% @ultimos_clientes.each do |cliente| %>
+            <div class="p-3 bg-gray-50 rounded-lg">
+              <p class="font-medium text-gray-900"><%= cliente.nome %></p>
+              <p class="text-sm text-gray-600"><%= cliente.telefone %></p>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-center text-gray-500 py-4">Nenhum cliente cadastrado</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
