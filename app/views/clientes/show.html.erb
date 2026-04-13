@@ -1,48 +1,116 @@
-<div class="mb-8 flex justify-between items-center">
-  <div>
+<div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
+  <div class="min-w-0 flex-1">
     <h1 class="text-3xl font-bold text-gray-900"><%= @cliente.nome %></h1>
-    <p class="mt-2 text-gray-600">Detalhes do cliente</p>
+    <p class="mt-2 text-gray-600">Detalhes do cliente e mesas de bilhar cadastradas</p>
   </div>
-  <div class="flex space-x-3">
-    <%= link_to edit_cliente_path(@cliente), class: "inline-flex items-center px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition" do %>
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div class="flex w-full flex-shrink-0 flex-wrap items-center justify-start space-x-4 sm:w-auto sm:justify-end">
+    <%= link_to new_cliente_mesa_path(@cliente), class: "inline-flex flex-shrink-0 items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition" do %>
+      <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      Nova mesa
+    <% end %>
+    <%= link_to edit_cliente_path(@cliente), class: "inline-flex flex-shrink-0 items-center px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition" do %>
+      <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
       </svg>
-      Editar
+      Editar cliente
     <% end %>
-    <%= link_to clientes_path, class: "inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition" do %>
-      Voltar
+    <%= link_to "Voltar", clientes_path, class: "inline-flex flex-shrink-0 items-center px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition" %>
+  </div>
+</div>
+
+<div class="mb-8 bg-white rounded-xl shadow-md p-8">
+  <div class="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
+    <div>
+      <span class="block text-sm font-medium text-gray-700 mb-2">Nome</span>
+      <p class="text-base text-gray-900 leading-relaxed"><%= @cliente.nome %></p>
+    </div>
+    <div>
+      <span class="block text-sm font-medium text-gray-700 mb-2">Telefone</span>
+      <p class="text-base text-gray-900 leading-relaxed"><%= @cliente.telefone %></p>
+    </div>
+    <div>
+      <span class="block text-sm font-medium text-gray-700 mb-2">Email</span>
+      <p class="text-base text-gray-900 leading-relaxed"><%= @cliente.email.presence || "—" %></p>
+    </div>
+    <div>
+      <span class="block text-sm font-medium text-gray-700 mb-2">Cadastrado em</span>
+      <p class="text-base text-gray-900 leading-relaxed"><%= format_date(@cliente.created_at.to_date) %></p>
+    </div>
+    <% if @cliente.observacoes.present? %>
+      <div class="md:col-span-2">
+        <span class="block text-sm font-medium text-gray-700 mb-2">Observações</span>
+        <p class="text-base text-gray-900 leading-relaxed whitespace-pre-wrap"><%= @cliente.observacoes %></p>
+      </div>
     <% end %>
   </div>
 </div>
 
-<div class="bg-white rounded-xl shadow-md p-8">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <label class="block text-sm font-medium text-gray-500 mb-1">Nome</label>
-      <p class="text-lg font-semibold text-gray-900"><%= @cliente.nome %></p>
+<div class="bg-white rounded-xl shadow-md overflow-hidden">
+  <div class="border-b border-gray-200 p-8">
+    <div class="space-y-3">
+      <h2 class="text-xl font-bold text-gray-900">Mesas de bilhar</h2>
+      <p class="text-sm leading-relaxed text-gray-600">Ordem, numeração e registros (fichas) de cada mesa deste cliente.</p>
     </div>
-
-    <div>
-      <label class="block text-sm font-medium text-gray-500 mb-1">Telefone</label>
-      <p class="text-lg font-semibold text-gray-900"><%= @cliente.telefone %></p>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-gray-500 mb-1">Email</label>
-      <p class="text-lg font-semibold text-gray-900"><%= @cliente.email || "-" %></p>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-gray-500 mb-1">Cadastrado em</label>
-      <p class="text-lg font-semibold text-gray-900"><%= format_date(@cliente.created_at.to_date) %></p>
-    </div>
-
-    <% if @cliente.observacoes.present? %>
-      <div class="md:col-span-2">
-        <label class="block text-sm font-medium text-gray-500 mb-1">Observações</label>
-        <p class="text-gray-900 whitespace-pre-wrap"><%= @cliente.observacoes %></p>
-      </div>
-    <% end %>
   </div>
+
+  <% if @cliente.mesas_de_bilhar.any? %>
+    <div class="overflow-x-auto px-6 py-6">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ordem</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Numeração</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registros (fichas)</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 bg-white">
+          <% @cliente.mesas_de_bilhar.each do |mesa| %>
+            <tr class="transition-colors hover:bg-gray-50">
+              <td class="whitespace-nowrap px-6 py-6">
+                <span class="text-sm font-medium text-gray-900">Mesa <%= mesa.ordem %></span>
+              </td>
+              <td class="whitespace-nowrap px-6 py-6">
+                <span class="text-sm text-gray-900"><%= mesa.numeracao %></span>
+              </td>
+              <td class="whitespace-nowrap px-6 py-6">
+                <span class="text-sm font-medium tabular-nums text-gray-900"><%= number_with_delimiter(mesa.registros, delimiter: ".") %></span>
+              </td>
+              <td class="whitespace-nowrap px-6 py-6 text-sm font-medium">
+                <div class="flex items-center space-x-4">
+                  <%= link_to edit_cliente_mesa_path(@cliente, mesa), class: "inline-flex text-yellow-600 hover:text-yellow-900", title: "Editar mesa" do %>
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                  <% end %>
+                  <%= button_to cliente_mesa_path(@cliente, mesa),
+                      method: :delete,
+                      data: { turbo_confirm: "Tem certeza que deseja excluir esta mesa?" },
+                      form: { class: "inline" },
+                      class: "inline-flex text-red-600 hover:text-red-900 bg-transparent border-0 p-0 cursor-pointer",
+                      title: "Excluir mesa" do %>
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="px-8 py-14 text-center">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+      </svg>
+      <p class="mt-4 text-gray-600">Nenhuma mesa cadastrada para este cliente.</p>
+      <div class="mt-6 flex justify-center">
+        <%= link_to "Cadastrar primeira mesa", new_cliente_mesa_path(@cliente), class: "inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition" %>
+      </div>
+    </div>
+  <% end %>
 </div>

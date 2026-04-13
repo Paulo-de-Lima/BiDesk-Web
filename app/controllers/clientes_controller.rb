@@ -44,7 +44,9 @@ class ClientesController < ApplicationController
   private
 
   def set_cliente
-    @cliente = Cliente.find(params[:id])
+    scope = Cliente.all
+    scope = scope.includes(:mesas_de_bilhar) if action_name == "show"
+    @cliente = scope.find(params[:id])
   end
 
   def cliente_params

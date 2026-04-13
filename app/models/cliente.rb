@@ -1,4 +1,8 @@
 class Cliente < ApplicationRecord
+  has_many :mesas_de_bilhar, -> { order(ordem: :asc) },
+           class_name: "MesaDeBilhar",
+           dependent: :destroy
+
   validates :nome, presence: true
   validates :telefone, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true

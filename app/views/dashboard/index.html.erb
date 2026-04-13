@@ -202,7 +202,7 @@
         <% if @ultimos_clientes.any? %>
           <% @ultimos_clientes.each do |cliente| %>
             <div class="p-3 bg-gray-50 rounded-lg">
-              <p class="font-medium text-gray-900"><%= cliente.nome %></p>
+              <p class="font-medium text-gray-900"><%= link_to cliente.nome, cliente_path(cliente), class: "text-emerald-800 hover:underline" %></p>
               <p class="text-sm text-gray-600"><%= cliente.telefone %></p>
             </div>
           <% end %>
