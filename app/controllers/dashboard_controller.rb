@@ -1,5 +1,7 @@
 class DashboardController < ApplicationController
   def index
+    @ultima_atualizacao = Time.current
+
     @total_clientes = Cliente.count
     @total_produtos = Produto.count
     @produtos_baixo_estoque = Produto.baixo_estoque.count

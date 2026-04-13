@@ -1580,3 +1580,421 @@ Processing by DashboardController#index as HTML
 Completed 200 OK in 34ms (Views: 13.6ms | ActiveRecord: 6.3ms (11 queries, 0 cached) | GC: 0.4ms)
 
 
+Started GET "/" for 127.0.0.1 at 2026-04-13 15:19:14 -0300
+  [1m[36mActiveRecord::SchemaMigration Load (2.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Firstapp'*/[0m
+Processing by DashboardController#index as HTML
+  [1m[36mAdmin Load (1.1ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mCliente Count (1.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "clientes" /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:3:in 'DashboardController#index'
+  [1m[36mProduto Count (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "produtos" /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:4:in 'DashboardController#index'
+  [1m[36mProduto Count (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "produtos" WHERE (quantidade <= valor_minimo) /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:5:in 'DashboardController#index'
+  [1m[36mManutencao Count (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "manutencaos" WHERE "manutencaos"."status" = 'pendente' /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:6:in 'DashboardController#index'
+  [1m[36mTransacaoFinanceira Sum (1.3ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'receita' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:10:in 'DashboardController#index'
+  [1m[36mTransacaoFinanceira Sum (0.5ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'despesa' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:11:in 'DashboardController#index'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  [1m[36mTransacaoFinanceira Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "transacao_financeiras" LIMIT 1 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:146
+  [1m[36mTransacaoFinanceira Load (1.0ms)[0m  [1m[34mSELECT "transacao_financeiras".* FROM "transacao_financeiras" ORDER BY "transacao_financeiras"."data" DESC LIMIT 5 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:147
+  [1m[36mCliente Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "clientes" LIMIT 1 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:175
+  [1m[36mCliente Load (1.0ms)[0m  [1m[34mSELECT "clientes".* FROM "clientes" ORDER BY "clientes"."created_at" DESC LIMIT 5 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:176
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 222.9ms | GC: 3.3ms)
+  Rendered layouts/_navbar.html.erb (Duration: 9.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 411.0ms | GC: 5.8ms)
+Completed 200 OK in 2751ms (Views: 559.6ms | ActiveRecord: 34.1ms (11 queries, 0 cached) | GC: 55.2ms)
+
+
+Started GET "/financeiro/new" for 127.0.0.1 at 2026-04-13 15:19:27 -0300
+Processing by FinanceiroController#new as HTML
+  [1m[36mAdmin Load (0.7ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering financeiro/new.html.erb within layouts/application
+  Rendered financeiro/new.html.erb within layouts/application (Duration: 249.7ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 1.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 258.0ms | GC: 0.0ms)
+Completed 200 OK in 311ms (Views: 265.8ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/financeiro/new" for 127.0.0.1 at 2026-04-13 15:19:28 -0300
+Processing by FinanceiroController#new as HTML
+  [1m[36mAdmin Load (1.1ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering financeiro/new.html.erb within layouts/application
+  Rendered financeiro/new.html.erb within layouts/application (Duration: 2.5ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 9.2ms | GC: 0.0ms)
+Completed 200 OK in 58ms (Views: 15.6ms | ActiveRecord: 1.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-04-13 15:23:18 -0300
+Processing by DashboardController#index as HTML
+  [1m[36mAdmin Load (0.5ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mCliente Count (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "clientes" /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:5:in 'DashboardController#index'
+  [1m[36mProduto Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "produtos" /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:6:in 'DashboardController#index'
+  [1m[36mProduto Count (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "produtos" WHERE (quantidade <= valor_minimo) /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:7:in 'DashboardController#index'
+  [1m[36mManutencao Count (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "manutencaos" WHERE "manutencaos"."status" = 'pendente' /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:8:in 'DashboardController#index'
+  [1m[36mTransacaoFinanceira Sum (0.8ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'receita' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:12:in 'DashboardController#index'
+  [1m[36mTransacaoFinanceira Sum (0.8ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'despesa' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:13:in 'DashboardController#index'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  [1m[36mTransacaoFinanceira Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "transacao_financeiras" LIMIT 1 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:172
+  [1m[36mTransacaoFinanceira Load (0.8ms)[0m  [1m[34mSELECT "transacao_financeiras".* FROM "transacao_financeiras" ORDER BY "transacao_financeiras"."data" DESC LIMIT 5 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:173
+  [1m[36mCliente Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "clientes" LIMIT 1 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:201
+  [1m[36mCliente Load (0.6ms)[0m  [1m[34mSELECT "clientes".* FROM "clientes" ORDER BY "clientes"."created_at" DESC LIMIT 5 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:202
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 41.3ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 5.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 109.8ms | GC: 0.0ms)
+Completed 200 OK in 383ms (Views: 127.7ms | ActiveRecord: 17.5ms (11 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/clientes/new" for 127.0.0.1 at 2026-04-13 15:23:33 -0300
+Processing by ClientesController#new as HTML
+  [1m[36mAdmin Load (0.4ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='clientes'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering clientes/new.html.erb within layouts/application
+  Rendered clientes/new.html.erb within layouts/application (Duration: 33.4ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 5.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 62.2ms | GC: 0.0ms)
+Completed 200 OK in 176ms (Views: 78.0ms | ActiveRecord: 4.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/financeiro/new" for 127.0.0.1 at 2026-04-13 15:23:34 -0300
+Processing by FinanceiroController#new as HTML
+  [1m[36mAdmin Load (0.6ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering financeiro/new.html.erb within layouts/application
+  Rendered financeiro/new.html.erb within layouts/application (Duration: 8.1ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 12.1ms | GC: 0.0ms)
+Completed 200 OK in 99ms (Views: 17.5ms | ActiveRecord: 2.9ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manutencao" for 127.0.0.1 at 2026-04-13 15:24:34 -0300
+Processing by ManutencaoController#index as HTML
+  [1m[36mAdmin Load (0.6ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='index',application='Firstapp',controller='manutencao'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mManutencao Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "manutencaos" WHERE "manutencaos"."status" = 'pendente' /*action='index',application='Firstapp',controller='manutencao'*/[0m
+  ↳ app/controllers/manutencao_controller.rb:13:in 'ManutencaoController#index'
+  [1m[36mManutencao Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "manutencaos" WHERE "manutencaos"."status" = 'em_andamento' /*action='index',application='Firstapp',controller='manutencao'*/[0m
+  ↳ app/controllers/manutencao_controller.rb:14:in 'ManutencaoController#index'
+  [1m[36mManutencao Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "manutencaos" WHERE "manutencaos"."status" = 'concluida' /*action='index',application='Firstapp',controller='manutencao'*/[0m
+  ↳ app/controllers/manutencao_controller.rb:15:in 'ManutencaoController#index'
+  [1m[36mManutencao Pluck (0.7ms)[0m  [1m[34mSELECT DISTINCT "manutencaos"."equipamento" FROM "manutencaos" /*action='index',application='Firstapp',controller='manutencao'*/[0m
+  ↳ app/controllers/manutencao_controller.rb:16:in 'ManutencaoController#index'
+  Rendering layout layouts/application.html.erb
+  Rendering manutencao/index.html.erb within layouts/application
+  [1m[36mManutencao Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "manutencaos" /*action='index',application='Firstapp',controller='manutencao'*/[0m
+  ↳ app/views/manutencao/index.html.erb:31
+  [1m[36mManutencao Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "manutencaos" LIMIT 1 /*action='index',application='Firstapp',controller='manutencao'*/[0m
+  ↳ app/views/manutencao/index.html.erb:68
+  [1m[36mManutencao Load (0.6ms)[0m  [1m[34mSELECT "manutencaos".* FROM "manutencaos" ORDER BY "manutencaos"."data" DESC /*action='index',application='Firstapp',controller='manutencao'*/[0m
+  ↳ app/views/manutencao/index.html.erb:69
+  Rendered manutencao/index.html.erb within layouts/application (Duration: 27.6ms | GC: 0.7ms)
+  Rendered layouts/_navbar.html.erb (Duration: 5.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 54.2ms | GC: 1.2ms)
+Completed 200 OK in 229ms (Views: 72.6ms | ActiveRecord: 8.9ms (8 queries, 0 cached) | GC: 3.8ms)
+
+
+Started GET "/estoque" for 127.0.0.1 at 2026-04-13 15:24:37 -0300
+Started GET "/clientes" for 127.0.0.1 at 2026-04-13 15:24:37 -0300
+Processing by EstoqueController#index as HTML
+  [1m[36mAdmin Load (0.4ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mProduto Pluck (0.7ms)[0m  [1m[34mSELECT DISTINCT "produtos"."categoria" FROM "produtos" /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/controllers/estoque_controller.rb:13:in 'EstoqueController#index'
+  Rendering layout layouts/application.html.erb
+  Rendering estoque/index.html.erb within layouts/application
+  [1m[36mProduto Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "produtos" WHERE (quantidade <= valor_minimo) LIMIT 1 /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/views/estoque/index.html.erb:16
+  [1m[36mProduto Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "produtos" WHERE (quantidade <= valor_minimo) /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/views/estoque/index.html.erb:21
+  [1m[36mProduto Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "produtos" LIMIT 1 /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/views/estoque/index.html.erb:61
+  [1m[36mProduto Load (0.5ms)[0m  [1m[34mSELECT "produtos".* FROM "produtos" ORDER BY "produtos"."nome" ASC /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/views/estoque/index.html.erb:62
+  Rendered estoque/index.html.erb within layouts/application (Duration: 29.9ms | GC: 0.4ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 34.7ms | GC: 0.4ms)
+Completed 200 OK in 96ms (Views: 38.3ms | ActiveRecord: 4.8ms (6 queries, 0 cached) | GC: 0.9ms)
+
+
+Started GET "/estoque" for 127.0.0.1 at 2026-04-13 15:24:38 -0300
+Processing by ClientesController#index as HTML
+  [1m[36mAdmin Load (0.7ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='index',application='Firstapp',controller='clientes'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering clientes/index.html.erb within layouts/application
+  [1m[36mCliente Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "clientes" LIMIT 1 /*action='index',application='Firstapp',controller='clientes'*/[0m
+  ↳ app/views/clientes/index.html.erb:42
+  [1m[36mCliente Load (0.6ms)[0m  [1m[34mSELECT "clientes".* FROM "clientes" ORDER BY "clientes"."created_at" DESC /*action='index',application='Firstapp',controller='clientes'*/[0m
+  ↳ app/views/clientes/index.html.erb:43
+  Rendered clientes/index.html.erb within layouts/application (Duration: 25.9ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 34.6ms | GC: 0.6ms)
+Completed 200 OK in 125ms (Views: 41.8ms | ActiveRecord: 4.0ms (3 queries, 0 cached) | GC: 1.3ms)
+
+
+Processing by EstoqueController#index as HTML
+  [1m[36mAdmin Load (0.5ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mProduto Pluck (0.5ms)[0m  [1m[34mSELECT DISTINCT "produtos"."categoria" FROM "produtos" /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/controllers/estoque_controller.rb:13:in 'EstoqueController#index'
+  Rendering layout layouts/application.html.erb
+  Rendering estoque/index.html.erb within layouts/application
+  [1m[36mProduto Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "produtos" WHERE (quantidade <= valor_minimo) LIMIT 1 /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/views/estoque/index.html.erb:16
+  [1m[36mProduto Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "produtos" WHERE (quantidade <= valor_minimo) /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/views/estoque/index.html.erb:21
+  [1m[36mProduto Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "produtos" LIMIT 1 /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/views/estoque/index.html.erb:61
+  [1m[36mProduto Load (0.7ms)[0m  [1m[34mSELECT "produtos".* FROM "produtos" ORDER BY "produtos"."nome" ASC /*action='index',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/views/estoque/index.html.erb:62
+  Rendered estoque/index.html.erb within layouts/application (Duration: 32.2ms | GC: 0.6ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 38.3ms | GC: 0.6ms)
+Completed 200 OK in 87ms (Views: 39.4ms | ActiveRecord: 3.2ms (6 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/clientes/5/edit" for 127.0.0.1 at 2026-04-13 15:24:39 -0300
+Processing by ClientesController#edit as HTML
+  Parameters: {"id" => "5"}
+  [1m[36mAdmin Load (0.5ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='edit',application='Firstapp',controller='clientes'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mCliente Load (1.4ms)[0m  [1m[34mSELECT "clientes".* FROM "clientes" WHERE "clientes"."id" = 5 LIMIT 1 /*action='edit',application='Firstapp',controller='clientes'*/[0m
+  ↳ app/controllers/clientes_controller.rb:47:in 'ClientesController#set_cliente'
+  Rendering layout layouts/application.html.erb
+  Rendering clientes/edit.html.erb within layouts/application
+  Rendered clientes/edit.html.erb within layouts/application (Duration: 7.2ms | GC: 0.2ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 11.5ms | GC: 0.2ms)
+Completed 200 OK in 74ms (Views: 14.6ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/financeiro" for 127.0.0.1 at 2026-04-13 15:24:39 -0300
+Processing by FinanceiroController#index as HTML
+  [1m[36mAdmin Load (0.5ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mTransacaoFinanceira Sum (0.5ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'receita' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:15:in 'FinanceiroController#index'
+  [1m[36mTransacaoFinanceira Sum (0.6ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'despesa' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:16:in 'FinanceiroController#index'
+  [1m[36mTransacaoFinanceira Sum (0.4ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'receita' /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:19:in 'FinanceiroController#index'
+  [1m[36mTransacaoFinanceira Sum (0.5ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'despesa' /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:20:in 'FinanceiroController#index'
+  [1m[36mTransacaoFinanceira Pluck (0.4ms)[0m  [1m[34mSELECT DISTINCT "transacao_financeiras"."categoria" FROM "transacao_financeiras" /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:23:in 'FinanceiroController#index'
+  Rendering layout layouts/application.html.erb
+  Rendering financeiro/index.html.erb within layouts/application
+  [1m[36mTransacaoFinanceira Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "transacao_financeiras" LIMIT 1 /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/views/financeiro/index.html.erb:66
+  [1m[36mTransacaoFinanceira Load (0.4ms)[0m  [1m[34mSELECT "transacao_financeiras".* FROM "transacao_financeiras" ORDER BY "transacao_financeiras"."data" DESC /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/views/financeiro/index.html.erb:67
+  Rendered financeiro/index.html.erb within layouts/application (Duration: 20.3ms | GC: 3.9ms)
+  Rendered layouts/_navbar.html.erb (Duration: 1.6ms | GC: 0.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 27.8ms | GC: 6.9ms)
+Completed 200 OK in 130ms (Views: 31.8ms | ActiveRecord: 5.1ms (8 queries, 0 cached) | GC: 7.1ms)
+
+
+Started GET "/financeiro/5/edit" for 127.0.0.1 at 2026-04-13 15:24:41 -0300
+Processing by FinanceiroController#edit as HTML
+  Parameters: {"id" => "5"}
+  [1m[36mAdmin Load (0.5ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='edit',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mTransacaoFinanceira Load (0.5ms)[0m  [1m[34mSELECT "transacao_financeiras".* FROM "transacao_financeiras" WHERE "transacao_financeiras"."id" = 5 LIMIT 1 /*action='edit',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:62:in 'FinanceiroController#set_transacao'
+  Rendering layout layouts/application.html.erb
+  Rendering financeiro/edit.html.erb within layouts/application
+  Rendered financeiro/edit.html.erb within layouts/application (Duration: 6.8ms | GC: 1.1ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 11.7ms | GC: 2.5ms)
+Completed 200 OK in 56ms (Views: 13.2ms | ActiveRecord: 0.9ms (2 queries, 0 cached) | GC: 8.1ms)
+
+
+Started GET "/financeiro/5/edit" for 127.0.0.1 at 2026-04-13 15:24:41 -0300
+Processing by FinanceiroController#edit as HTML
+  Parameters: {"id" => "5"}
+  [1m[36mAdmin Load (0.6ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='edit',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mTransacaoFinanceira Load (0.7ms)[0m  [1m[34mSELECT "transacao_financeiras".* FROM "transacao_financeiras" WHERE "transacao_financeiras"."id" = 5 LIMIT 1 /*action='edit',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:62:in 'FinanceiroController#set_transacao'
+  Rendering layout layouts/application.html.erb
+  Rendering financeiro/edit.html.erb within layouts/application
+  Rendered financeiro/edit.html.erb within layouts/application (Duration: 5.1ms | GC: 2.5ms)
+  Rendered layouts/_navbar.html.erb (Duration: 1.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 11.4ms | GC: 3.3ms)
+Completed 200 OK in 62ms (Views: 15.1ms | ActiveRecord: 1.3ms (2 queries, 0 cached) | GC: 9.2ms)
+
+
+Started PATCH "/financeiro/5" for 127.0.0.1 at 2026-04-13 15:24:43 -0300
+Processing by FinanceiroController#update as TURBO_STREAM
+  Parameters: {"authenticity_token" => "[FILTERED]", "transacao_financeira" => {"tipo" => "despesa", "descricao" => "Pagamento de funcionário", "valor" => "1200.0", "data" => "2026-04-11", "categoria" => "Folha de Pagamento"}, "commit" => "Atualizar", "id" => "5"}
+  [1m[36mAdmin Load (0.4ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='update',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mTransacaoFinanceira Load (0.4ms)[0m  [1m[34mSELECT "transacao_financeiras".* FROM "transacao_financeiras" WHERE "transacao_financeiras"."id" = 5 LIMIT 1 /*action='update',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:62:in 'FinanceiroController#set_transacao'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*action='update',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:47:in 'FinanceiroController#update'
+  [1m[36mTransacaoFinanceira Update (5.3ms)[0m  [1m[33mUPDATE "transacao_financeiras" SET "updated_at" = '2026-04-13 18:24:44.054432', "valor" = 1200.0 WHERE "transacao_financeiras"."id" = 5 /*action='update',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:47:in 'FinanceiroController#update'
+  [1m[36mTRANSACTION (3.7ms)[0m  [1m[35mCOMMIT /*action='update',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:47:in 'FinanceiroController#update'
+Redirected to http://127.0.0.1:3000/financeiro
+↳ app/controllers/financeiro_controller.rb:48:in 'FinanceiroController#update'
+Completed 302 Found in 55ms (ActiveRecord: 9.9ms (3 queries, 0 cached) | GC: 11.0ms)
+
+
+Started GET "/financeiro" for 127.0.0.1 at 2026-04-13 15:24:44 -0300
+Processing by FinanceiroController#index as TURBO_STREAM
+  [1m[36mAdmin Load (0.5ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mTransacaoFinanceira Sum (0.6ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'receita' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:15:in 'FinanceiroController#index'
+  [1m[36mTransacaoFinanceira Sum (0.6ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'despesa' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:16:in 'FinanceiroController#index'
+  [1m[36mTransacaoFinanceira Sum (0.5ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'receita' /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:19:in 'FinanceiroController#index'
+  [1m[36mTransacaoFinanceira Sum (0.5ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'despesa' /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:20:in 'FinanceiroController#index'
+  [1m[36mTransacaoFinanceira Pluck (0.5ms)[0m  [1m[34mSELECT DISTINCT "transacao_financeiras"."categoria" FROM "transacao_financeiras" /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/financeiro_controller.rb:23:in 'FinanceiroController#index'
+  Rendering layout layouts/application.html.erb
+  Rendering financeiro/index.html.erb within layouts/application
+  [1m[36mTransacaoFinanceira Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "transacao_financeiras" LIMIT 1 /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/views/financeiro/index.html.erb:66
+  [1m[36mTransacaoFinanceira Load (0.6ms)[0m  [1m[34mSELECT "transacao_financeiras".* FROM "transacao_financeiras" ORDER BY "transacao_financeiras"."data" DESC /*action='index',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/views/financeiro/index.html.erb:67
+  Rendered financeiro/index.html.erb within layouts/application (Duration: 26.7ms | GC: 16.6ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 31.7ms | GC: 17.2ms)
+Completed 200 OK in 101ms (Views: 32.8ms | ActiveRecord: 4.1ms (8 queries, 0 cached) | GC: 24.4ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-04-13 15:24:45 -0300
+Processing by DashboardController#index as HTML
+  [1m[36mAdmin Load (0.4ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  [1m[36mCliente Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "clientes" /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:5:in 'DashboardController#index'
+  [1m[36mProduto Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "produtos" /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:6:in 'DashboardController#index'
+  [1m[36mProduto Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "produtos" WHERE (quantidade <= valor_minimo) /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:7:in 'DashboardController#index'
+  [1m[36mManutencao Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "manutencaos" WHERE "manutencaos"."status" = 'pendente' /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:8:in 'DashboardController#index'
+  [1m[36mTransacaoFinanceira Sum (0.4ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'receita' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:12:in 'DashboardController#index'
+  [1m[36mTransacaoFinanceira Sum (0.4ms)[0m  [1m[34mSELECT SUM("transacao_financeiras"."valor") FROM "transacao_financeiras" WHERE "transacao_financeiras"."tipo" = 'despesa' AND (EXTRACT(YEAR FROM data) = 2026 AND EXTRACT(MONTH FROM data) = 4) /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:13:in 'DashboardController#index'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  [1m[36mTransacaoFinanceira Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "transacao_financeiras" LIMIT 1 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:170
+  [1m[36mTransacaoFinanceira Load (0.3ms)[0m  [1m[34mSELECT "transacao_financeiras".* FROM "transacao_financeiras" ORDER BY "transacao_financeiras"."data" DESC LIMIT 5 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:171
+  [1m[36mCliente Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "clientes" LIMIT 1 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:199
+  [1m[36mCliente Load (0.6ms)[0m  [1m[34mSELECT "clientes".* FROM "clientes" ORDER BY "clientes"."created_at" DESC LIMIT 5 /*action='index',application='Firstapp',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/index.html.erb:200
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 23.5ms | GC: 0.6ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 32.0ms | GC: 1.5ms)
+Completed 200 OK in 94ms (Views: 36.4ms | ActiveRecord: 4.6ms (11 queries, 0 cached) | GC: 1.5ms)
+
+
+Started GET "/estoque/new" for 127.0.0.1 at 2026-04-13 15:24:47 -0300
+Processing by EstoqueController#new as HTML
+  [1m[36mAdmin Load (0.4ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering estoque/new.html.erb within layouts/application
+  Rendered estoque/new.html.erb within layouts/application (Duration: 5.5ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.8ms | GC: 0.5ms)
+  Rendered layout layouts/application.html.erb (Duration: 9.5ms | GC: 0.5ms)
+Completed 200 OK in 49ms (Views: 11.7ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/clientes/new" for 127.0.0.1 at 2026-04-13 15:24:48 -0300
+Processing by ClientesController#new as HTML
+  [1m[36mAdmin Load (0.7ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='clientes'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering clientes/new.html.erb within layouts/application
+  Rendered clientes/new.html.erb within layouts/application (Duration: 5.1ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 9.1ms | GC: 0.5ms)
+Completed 200 OK in 65ms (Views: 11.8ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/financeiro/new" for 127.0.0.1 at 2026-04-13 15:24:49 -0300
+Processing by FinanceiroController#new as HTML
+  [1m[36mAdmin Load (0.4ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='financeiro'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering financeiro/new.html.erb within layouts/application
+  Rendered financeiro/new.html.erb within layouts/application (Duration: 6.0ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 1.3ms | GC: 0.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 10.6ms | GC: 0.8ms)
+Completed 200 OK in 48ms (Views: 12.5ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/manutencao/new" for 127.0.0.1 at 2026-04-13 15:24:50 -0300
+Processing by ManutencaoController#new as HTML
+  [1m[36mAdmin Load (0.4ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='manutencao'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering manutencao/new.html.erb within layouts/application
+  Rendered manutencao/new.html.erb within layouts/application (Duration: 5.7ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 9.7ms | GC: 0.6ms)
+Completed 200 OK in 53ms (Views: 12.0ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/estoque/new" for 127.0.0.1 at 2026-04-13 15:24:51 -0300
+Processing by EstoqueController#new as HTML
+  [1m[36mAdmin Load (0.4ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering estoque/new.html.erb within layouts/application
+  Rendered estoque/new.html.erb within layouts/application (Duration: 1.3ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.4ms | GC: 0.0ms)
+Completed 200 OK in 31ms (Views: 6.0ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/estoque/new" for 127.0.0.1 at 2026-04-13 15:24:53 -0300
+Processing by EstoqueController#new as HTML
+  [1m[36mAdmin Load (0.4ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."id" = 1 LIMIT 1 /*action='new',application='Firstapp',controller='estoque'*/[0m
+  ↳ app/controllers/concerns/authenticatable.rb:10:in 'Authenticatable#current_admin'
+  Rendering layout layouts/application.html.erb
+  Rendering estoque/new.html.erb within layouts/application
+  Rendered estoque/new.html.erb within layouts/application (Duration: 1.3ms | GC: 0.0ms)
+  Rendered layouts/_navbar.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.9ms | GC: 0.0ms)
+Completed 200 OK in 32ms (Views: 6.6ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
