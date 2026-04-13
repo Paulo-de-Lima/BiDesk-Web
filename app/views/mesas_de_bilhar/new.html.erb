@@ -1,0 +1,10 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold text-gray-900">Nova mesa de bilhar</h1>
+  <p class="mt-2 text-gray-600">
+    Cliente: <span class="font-semibold text-gray-800"><%= @cliente.nome %></span>
+  </p>
+</div>
+
+<div class="rounded-xl bg-white p-8 shadow-md">
+  <%= render "form", mesa: @mesa %>
+</div>

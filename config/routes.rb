@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   get "dashboard", to: "dashboard#index"
 
   # Recursos
-  resources :clientes
+  resources :clientes do
+    resources :mesas, controller: "mesas_de_bilhar", except: [:index, :show]
+  end
   resources :manutencao, path: "manutencao" do
     collection do
       post :undo_destroy

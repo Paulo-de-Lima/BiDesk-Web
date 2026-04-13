@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_20_035648) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_13_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,6 +40,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_20_035648) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "mesas_de_bilhar", force: :cascade do |t|
+    t.bigint "cliente_id", null: false
+    t.datetime "created_at", null: false
+    t.string "numeracao", null: false
+    t.integer "ordem", null: false
+    t.bigint "registros", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cliente_id", "ordem"], name: "index_mesas_de_bilhar_on_cliente_id_and_ordem", unique: true
+    t.index ["cliente_id"], name: "index_mesas_de_bilhar_on_cliente_id"
+  end
+
   create_table "produtos", force: :cascade do |t|
     t.string "categoria"
     t.datetime "created_at", null: false
@@ -60,4 +71,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_20_035648) do
     t.datetime "updated_at", null: false
     t.decimal "valor"
   end
+
+  add_foreign_key "mesas_de_bilhar", "clientes"
 end

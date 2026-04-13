@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+/* Garante que classes usadas nas views entram no CSS compilado */
+@source "../../views/**/*.erb";
+@source "../../helpers/**/*.rb";

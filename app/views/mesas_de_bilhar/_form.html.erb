@@ -1,0 +1,47 @@
+<%= form_with model: mesa,
+    url: mesa.persisted? ? cliente_mesa_path(@cliente, mesa) : cliente_mesas_path(@cliente),
+    local: true,
+    class: "space-y-6" do |f| %>
+  <% if mesa.errors.any? %>
+    <div class="rounded-lg border-l-4 border-red-400 bg-red-50 p-4">
+      <h3 class="text-sm font-medium text-red-800">Não foi possível salvar:</h3>
+      <ul class="mt-2 list-inside list-disc text-sm text-red-700">
+        <% mesa.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if mesa.persisted? %>
+    <div>
+      <%= f.label :ordem, "Ordem (mesa 1, 2, 3…)", class: "mb-2 block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :ordem,
+          min: 1,
+          class: "w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500" %>
+      <p class="mt-1 text-xs text-gray-500">Altere para reordenar as mesas deste cliente.</p>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :numeracao, "Numeração da mesa *", class: "mb-2 block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :numeracao,
+        class: "w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500",
+        placeholder: "ex.: N 300, N 25, N 234",
+        required: true %>
+  </div>
+
+  <div>
+    <%= f.label :registros, "Registros (contagem de fichas) *", class: "mb-2 block text-sm font-medium text-gray-700" %>
+    <%= f.number_field :registros,
+        min: 0,
+        class: "w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500",
+        required: true %>
+    <p class="mt-1 text-xs text-gray-500">Número que contabiliza fichas (ex.: 231092).</p>
+  </div>
+
+  <div class="flex justify-end gap-4 pt-4">
+    <%= link_to "Cancelar", @cliente, class: "rounded-lg border border-gray-300 px-6 py-2 text-gray-700 transition hover:bg-gray-50" %>
+    <%= f.submit class: "rounded-lg bg-green-600 px-6 py-2 text-white transition hover:bg-green-700" %>
+  </div>
+<% end %>
