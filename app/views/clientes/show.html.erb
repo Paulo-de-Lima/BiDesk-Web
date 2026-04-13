@@ -1,49 +1,48 @@
-  <div class="mb-8 flex justify-between items-center">
-    <div>
-      <h1 class="text-3xl font-bold text-gray-900"><%= @cliente.nome %></h1>
-      <p class="mt-2 text-gray-600">Detalhes do cliente</p>
-    </div>
-    <div class="flex space-x-3">
-      <%= link_to edit_cliente_path(@cliente), class: "inline-flex items-center px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition" do %>
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-        </svg>
-        Editar
-      <% end %>
-      <%= link_to clientes_path, class: "inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition" do %>
-        Voltar
-      <% end %>
-    </div>
+<div class="mb-8 flex justify-between items-center">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900"><%= @cliente.nome %></h1>
+    <p class="mt-2 text-gray-600">Detalhes do cliente</p>
   </div>
+  <div class="flex space-x-3">
+    <%= link_to edit_cliente_path(@cliente), class: "inline-flex items-center px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition" do %>
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+      </svg>
+      Editar
+    <% end %>
+    <%= link_to clientes_path, class: "inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition" do %>
+      Voltar
+    <% end %>
+  </div>
+</div>
 
-  <div class="bg-white rounded-xl shadow-md p-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <label class="block text-sm font-medium text-gray-500 mb-1">Nome</label>
-        <p class="text-lg font-semibold text-gray-900"><%= @cliente.nome %></p>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-500 mb-1">Telefone</label>
-        <p class="text-lg font-semibold text-gray-900"><%= @cliente.telefone %></p>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-500 mb-1">Email</label>
-        <p class="text-lg font-semibold text-gray-900"><%= @cliente.email || "-" %></p>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-500 mb-1">Cadastrado em</label>
-        <p class="text-lg font-semibold text-gray-900"><%= format_date(@cliente.created_at.to_date) %></p>
-      </div>
-
-      <% if @cliente.observacoes.present? %>
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-500 mb-1">Observações</label>
-          <p class="text-gray-900 whitespace-pre-wrap"><%= @cliente.observacoes %></p>
-        </div>
-      <% end %>
+<div class="bg-white rounded-xl shadow-md p-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <label class="block text-sm font-medium text-gray-500 mb-1">Nome</label>
+      <p class="text-lg font-semibold text-gray-900"><%= @cliente.nome %></p>
     </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-500 mb-1">Telefone</label>
+      <p class="text-lg font-semibold text-gray-900"><%= @cliente.telefone %></p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-500 mb-1">Email</label>
+      <p class="text-lg font-semibold text-gray-900"><%= @cliente.email || "-" %></p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-500 mb-1">Cadastrado em</label>
+      <p class="text-lg font-semibold text-gray-900"><%= format_date(@cliente.created_at.to_date) %></p>
+    </div>
+
+    <% if @cliente.observacoes.present? %>
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-gray-500 mb-1">Observações</label>
+        <p class="text-gray-900 whitespace-pre-wrap"><%= @cliente.observacoes %></p>
+      </div>
+    <% end %>
   </div>
 </div>
