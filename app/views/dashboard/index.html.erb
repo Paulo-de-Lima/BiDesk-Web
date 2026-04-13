@@ -34,7 +34,7 @@
       </div>
       <div class="dashboard-card-content flex items-center justify-between">
         <div>
-          <p class="text-sm font-medium text-gray-600">Saldo do Mês</p>
+          <p class="text-sm font-medium text-gray-600">Resultado do Mês</p>
           <p class="text-3xl font-bold <%= @saldo_mes >= 0 ? 'text-green-600' : 'text-red-600' %> mt-2">
             <%= format_currency(@saldo_mes) %>
           </p>
@@ -59,7 +59,7 @@
       </div>
       <div class="dashboard-card-content flex items-center justify-between">
         <div>
-          <p class="text-sm font-medium text-gray-600">Produtos em Estoque</p>
+          <p class="text-sm font-medium text-gray-600">Itens em Estoque</p>
           <p class="text-3xl font-bold text-gray-900 mt-2"><%= @total_produtos %></p>
           <% if @produtos_baixo_estoque > 0 %>
             <p class="text-sm text-red-600 mt-1"><%= @produtos_baixo_estoque %> com estoque baixo</p>
@@ -134,7 +134,7 @@
           <svg class="w-8 h-8 text-green-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
           </svg>
-          <p class="text-sm font-medium text-gray-700">Nova Transação</p>
+          <p class="text-sm font-medium text-gray-700">Nova Movimentação</p>
         <% end %>
         <%= link_to new_manutencao_path, class: "p-4 bg-red-50 hover:bg-red-100 rounded-lg transition text-center" do %>
           <svg class="w-8 h-8 text-red-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,10 +148,10 @@
 
   <!-- Tabelas Recentes -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- Últimas Transações -->
+    <!-- Últimas Movimentações -->
     <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-900">Últimas Transações</h2>
+        <h2 class="text-xl font-bold text-gray-900">Últimas Movimentações</h2>
         <%= link_to financeiro_index_path, class: "text-sm text-green-600 hover:text-green-800" do %>
           Ver todas →
         <% end %>
@@ -178,7 +178,7 @@
               <% end %>
             <% else %>
               <tr>
-                <td colspan="3" class="px-4 py-8 text-center text-gray-500">Nenhuma transação registrada</td>
+                <td colspan="3" class="px-4 py-8 text-center text-gray-500">Nenhuma movimentação registrada</td>
               </tr>
             <% end %>
           </tbody>
