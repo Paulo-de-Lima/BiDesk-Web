@@ -1,5 +1,5 @@
 class FinanceiroController < ApplicationController
-  before_action :set_transacao, only: [:edit, :update, :destroy]
+  before_action :set_transacao, only: [:show, :edit, :update, :destroy]
 
   def index
     @transacoes = if params[:tipo].present?

@@ -13,7 +13,11 @@ Rails.application.routes.draw do
 
   # Recursos
   resources :clientes
-  resources :manutencao, path: "manutencao"
+  resources :manutencao, path: "manutencao" do
+    collection do
+      post :undo_destroy
+    end
+  end
   resources :estoque, path: "estoque"
   resources :financeiro, path: "financeiro"
 end

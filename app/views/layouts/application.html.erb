@@ -3,40 +3,38 @@
   <head>
     <title><%= content_for(:title) || "BiDesk - Gestão Bilhar" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-web-app-capable" content="yes">
     <meta name="application-name" content="BiDesk">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= yield :head %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
   <body class="bg-gray-50 min-h-screen">
     <% unless controller_name == "sessions" %>
       <%= render "layouts/navbar" %>
     <% end %>
-    
+
     <main class="<%= controller_name == "sessions" ? "" : "pt-20" %>">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <% if notice %>
           <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-4 rounded-lg shadow-sm">
-            <div class="flex">
+            <div class="flex items-center justify-between gap-4">
               <div class="ml-3">
                 <p class="text-sm font-medium text-green-800"><%= notice %></p>
               </div>
+              <% if flash[:undo_manutencao] %>
+                <%= button_to "Desfazer", undo_destroy_manutencao_index_path, method: :post, class: "shrink-0 inline-flex items-center px-3 py-1.5 rounded-md bg-white text-green-700 text-sm font-medium border border-green-200 hover:bg-green-100 transition" %>
+              <% end %>
             </div>
           </div>
         <% end %>
-
         <% if alert %>
           <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-lg shadow-sm">
             <div class="flex">
@@ -46,7 +44,6 @@
             </div>
           </div>
         <% end %>
-
         <%= yield %>
       </div>
     </main>
