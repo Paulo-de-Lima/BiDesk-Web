@@ -1,6 +1,6 @@
 class MesasDeBilharController < ApplicationController
   before_action :set_cliente
-  before_action :set_mesa, only: [:edit, :update, :destroy]
+  before_action :set_mesa, only: [ :edit, :update, :destroy ]
 
   def new
     @mesa = @cliente.mesas_de_bilhar.build
@@ -8,22 +8,34 @@ class MesasDeBilharController < ApplicationController
 
   def create
     @mesa = @cliente.mesas_de_bilhar.build(mesa_params)
-    if @mesa.save
-      redirect_to @cliente, notice: "Mesa de bilhar cadastrada com sucesso."
-    else
-      render :new, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @mesa.save,
+      redirect_path: clientes_path,
+      notice: "Mesa de bilhar cadastrada com sucesso.",
+      tbody_id: "clientes_tbody",
+      partial: "clientes/tbody",
+      locals: { clientes: Cliente.lista_filtrada(params) }
+    )
+      return
     end
+    render :new, status: :unprocessable_entity
   end
 
   def edit
   end
 
   def update
-    if @mesa.update(mesa_params)
-      redirect_to @cliente, notice: "Mesa atualizada com sucesso."
-    else
-      render :edit, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @mesa.update(mesa_params),
+      redirect_path: clientes_path,
+      notice: "Mesa atualizada com sucesso.",
+      tbody_id: "clientes_tbody",
+      partial: "clientes/tbody",
+      locals: { clientes: Cliente.lista_filtrada(params) }
+    )
+      return
     end
+    render :edit, status: :unprocessable_entity
   end
 
   def destroy

@@ -1,0 +1,20 @@
+<%# locals: (clientes:) %>
+<% if clientes.any? %>
+  <% clientes.each do |cliente| %>
+    <%= render "clientes/row", cliente: cliente %>
+  <% end %>
+<% else %>
+  <tr>
+    <td colspan="4">
+      <%= render "shared/empty_state",
+          title: "Nenhum cliente encontrado",
+          description: (params[:busca].present? || clientes_filtros_ativos?) ? "Ajuste a busca ou os filtros." : "Comece cadastrando seu primeiro cliente.",
+          filtered: params[:busca].present? || clientes_filtros_ativos?,
+          clear_path: clientes_path,
+          action_label: "Cadastrar cliente",
+          action_path: new_cliente_path,
+          action_modal: true,
+          icon_path: ui_icon_path(:clientes) %>
+    </td>
+  </tr>
+<% end %>

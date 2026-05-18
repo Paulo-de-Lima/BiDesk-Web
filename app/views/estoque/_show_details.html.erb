@@ -1,0 +1,29 @@
+<%# locals: (produto:) %>
+<% if produto.estoque_baixo? %>
+  <span class="mb-4 inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-800">Estoque baixo</span>
+<% end %>
+<dl class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Nome</dt>
+    <dd class="mt-1 text-base font-semibold text-gray-900"><%= produto.nome %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Categoria</dt>
+    <dd class="mt-1 text-base text-gray-900"><%= produto.categoria.presence || "—" %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Quantidade</dt>
+    <dd class="mt-1 text-xl font-bold <%= produto.estoque_baixo? ? "text-red-600" : "text-emerald-600" %>"><%= produto.quantidade %></dd>
+    <dd class="text-xs text-gray-500">Mínimo: <%= produto.valor_minimo %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Preço</dt>
+    <dd class="mt-1 text-xl font-bold text-gray-900"><%= format_currency(produto.preco) %></dd>
+  </div>
+  <% if produto.descricao.present? %>
+    <div class="sm:col-span-2">
+      <dt class="text-sm font-medium text-gray-500">Descrição</dt>
+      <dd class="mt-1 whitespace-pre-wrap text-base text-gray-900"><%= produto.descricao %></dd>
+    </div>
+  <% end %>
+</dl>

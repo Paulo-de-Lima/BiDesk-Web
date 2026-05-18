@@ -1,0 +1,39 @@
+<%# locals: (manutencoes:) %>
+<% if manutencoes.any? %>
+  <% status_colors = { "pendente" => "bg-amber-100 text-amber-800", "em_andamento" => "bg-blue-100 text-blue-800", "concluida" => "bg-emerald-100 text-emerald-800", "cancelada" => "bg-red-100 text-red-800" } %>
+  <% manutencoes.each do |manutencao| %>
+    <tr>
+      <td class="whitespace-nowrap px-6 py-4 text-sm font-semibold text-gray-800"><%= manutencao.equipamento %></td>
+      <td class="px-6 py-4 text-sm text-gray-600"><%= truncate(manutencao.descricao, length: 50) %></td>
+      <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600"><%= format_date(manutencao.data) %></td>
+      <td class="whitespace-nowrap px-6 py-4">
+        <span class="rounded-full px-2.5 py-1 text-xs font-medium <%= status_colors[manutencao.status] || "bg-gray-100 text-gray-800" %>">
+          <%= manutencao.status.humanize %>
+        </span>
+      </td>
+      <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"><%= manutencao.custo ? format_currency(manutencao.custo) : "—" %></td>
+      <td class="whitespace-nowrap px-6 py-4 text-right">
+        <%= render "shared/table_actions",
+            show_path: manutencao_path(manutencao),
+            edit_path: edit_manutencao_path(manutencao),
+            destroy_path: manutencao_path(manutencao),
+            record_name: manutencao.equipamento,
+            use_modal: true %>
+      </td>
+    </tr>
+  <% end %>
+<% else %>
+  <tr>
+    <td colspan="6">
+      <%= render "shared/empty_state",
+          title: "Nenhuma manutenção encontrada",
+          description: manutencao_filtros_ativos? ? "Tente outro status ou equipamento." : "Registre reparos e revisões das mesas e equipamentos.",
+          filtered: manutencao_filtros_ativos?,
+          clear_path: manutencao_index_path,
+          action_label: "Registrar manutenção",
+          action_path: new_manutencao_path,
+          action_modal: true,
+          icon_path: ui_icon_path(:manutencao) %>
+    </td>
+  </tr>
+<% end %>

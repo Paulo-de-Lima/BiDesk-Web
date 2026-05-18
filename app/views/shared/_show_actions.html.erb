@@ -1,0 +1,24 @@
+<%# locals: (primary: [], secondary: [], back_path:, back_label: "Voltar") %>
+<div class="flex flex-wrap items-center gap-3">
+  <% Array(primary).each do |action| %>
+    <%= link_to action[:path],
+        class: "inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2",
+        data: (action[:modal] ? ui_modal_data : {}) do %>
+      <% if action[:icon] == :plus %>
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+      <% end %>
+      <%= action[:label] %>
+    <% end %>
+  <% end %>
+  <% Array(secondary).each do |action| %>
+    <%= link_to action[:path],
+        class: "inline-flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-800 transition hover:bg-amber-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
+        data: (action[:modal] ? ui_modal_data : {}) do %>
+      <%= action[:label] %>
+    <% end %>
+  <% end %>
+  <%= link_to back_label, back_path,
+      class: "inline-flex items-center rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600" %>
+</div>

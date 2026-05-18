@@ -1,0 +1,31 @@
+<%# locals: (title:, subtitle: nil, icon: :form) %>
+<div class="form-modal fixed inset-0 z-50 flex items-end justify-center p-3 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-labelledby="resource-modal-title" data-form-modal>
+  <button type="button" class="form-modal-backdrop absolute inset-0 bg-emerald-950/50 backdrop-blur-md" data-close-form-modal aria-label="Fechar"></button>
+
+  <div class="relative z-10 flex w-full max-w-xl max-h-[min(92vh,840px)] flex-col overflow-hidden rounded-2xl bg-white shadow-[0_25px_60px_-15px_rgba(6,78,59,0.35)] ring-1 ring-emerald-900/10" data-form-modal-panel>
+    <div class="h-1 shrink-0 bg-gradient-to-r from-emerald-700 via-emerald-500 to-teal-400" aria-hidden="true"></div>
+
+    <div class="flex shrink-0 items-start gap-4 border-b border-emerald-100/90 bg-gradient-to-b from-emerald-50/90 via-white to-white px-6 pb-5 pt-6">
+      <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 shadow-lg shadow-emerald-700/30">
+        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= ui_modal_icon_path(icon) %>"></path>
+        </svg>
+      </div>
+      <div class="min-w-0 flex-1 pt-0.5">
+        <h2 id="resource-modal-title" class="text-xl font-bold tracking-tight text-emerald-950"><%= title %></h2>
+        <% if subtitle.present? %>
+          <p class="mt-1.5 text-sm leading-relaxed text-emerald-800/70"><%= subtitle %></p>
+        <% end %>
+      </div>
+      <button type="button" data-close-form-modal class="shrink-0 rounded-xl border border-transparent p-2 text-emerald-700/60 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600" aria-label="Fechar">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="form-modal-body flex-1 overflow-y-auto overscroll-contain px-6 py-6">
+      <%= yield %>
+    </div>
+  </div>
+</div>

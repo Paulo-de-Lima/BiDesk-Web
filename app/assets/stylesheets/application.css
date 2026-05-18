@@ -1,10 +1,73 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
+ * Modal de formulário / visualização
  */
+
+[data-form-modal] {
+  pointer-events: none;
+}
+
+[data-form-modal].form-modal--open {
+  pointer-events: auto;
+}
+
+[data-form-modal] .form-modal-backdrop {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+[data-form-modal].form-modal--open .form-modal-backdrop {
+  opacity: 1;
+}
+
+[data-form-modal] [data-form-modal-panel] {
+  opacity: 0;
+  transform: translateY(1.25rem) scale(0.96);
+  transition:
+    opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-form-modal].form-modal--open [data-form-modal-panel] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (min-width: 640px) {
+  [data-form-modal] [data-form-modal-panel] {
+    transform: translateY(0.75rem) scale(0.96);
+  }
+
+  [data-form-modal].form-modal--open [data-form-modal-panel] {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.form-modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(16 185 129 / 0.4) transparent;
+}
+
+.form-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.form-modal-body::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-color: rgb(16 185 129 / 0.35);
+}
+
+/* Painel de mesas expandível */
+[data-cliente-mesas-row].cliente-mesas--open {
+  animation: cliente-mesas-fade 0.25s ease-out;
+}
+
+@keyframes cliente-mesas-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

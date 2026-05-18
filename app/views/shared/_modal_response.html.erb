@@ -1,0 +1,6 @@
+<%# locals: (title:, subtitle: nil, icon: :form) %>
+<%= turbo_frame_tag "resource_modal" do %>
+  <%= render "shared/resource_modal", title: title, subtitle: subtitle, icon: icon do %>
+    <%= yield %>
+  <% end %>
+<% end %>

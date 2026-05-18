@@ -1,11 +1,16 @@
 class ClientesController < ApplicationController
-  before_action :set_cliente, only: [:show, :edit, :update, :destroy]
+  before_action :set_cliente, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @clientes = if params[:busca].present?
-      Cliente.buscar(params[:busca])
-    else
-      Cliente.recentes
+    @clientes = Cliente.lista_filtrada(params)
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data clientes_csv(Cliente.lista_filtrada(params)),
+                  filename: "clientes-#{Date.current.strftime('%Y%m%d')}.csv",
+                  type: "text/csv; charset=utf-8"
+      end
     end
   end
 
@@ -18,22 +23,36 @@ class ClientesController < ApplicationController
 
   def create
     @cliente = Cliente.new(cliente_params)
-    if @cliente.save
-      redirect_to @cliente, notice: "Cliente criado com sucesso!"
-    else
-      render :new, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @cliente.save,
+      redirect_path: @cliente,
+      notice: "Cliente criado com sucesso!",
+      tbody_id: "clientes_tbody",
+      partial: "clientes/tbody",
+      locals: { clientes: Cliente.lista_filtrada(params) }
+    )
+      return
     end
+
+    render :new, status: :unprocessable_entity
   end
 
   def edit
   end
 
   def update
-    if @cliente.update(cliente_params)
-      redirect_to @cliente, notice: "Cliente atualizado com sucesso!"
-    else
-      render :edit, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @cliente.update(cliente_params),
+      redirect_path: @cliente,
+      notice: "Cliente atualizado com sucesso!",
+      tbody_id: "clientes_tbody",
+      partial: "clientes/tbody",
+      locals: { clientes: Cliente.lista_filtrada(params) }
+    )
+      return
     end
+
+    render :edit, status: :unprocessable_entity
   end
 
   def destroy
@@ -51,5 +70,15 @@ class ClientesController < ApplicationController
 
   def cliente_params
     params.require(:cliente).permit(:nome, :telefone, :email, :observacoes)
+  end
+
+  def clientes_csv(clientes)
+    bom = "\uFEFF"
+    bom + CSV.generate(headers: true, col_sep: ";") do |csv|
+      csv << [ "Nome", "Telefone", "Email" ]
+      clientes.each do |cliente|
+        csv << [ cliente.nome, cliente.telefone, cliente.email ]
+      end
+    end
   end
 end

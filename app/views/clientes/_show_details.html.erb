@@ -1,0 +1,38 @@
+<%# locals: (cliente:) %>
+<dl class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Nome</dt>
+    <dd class="mt-1 text-base font-medium text-gray-900"><%= cliente.nome %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Telefone</dt>
+    <dd class="mt-1 text-base text-gray-900"><%= cliente.telefone %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Email</dt>
+    <dd class="mt-1 text-base text-gray-900"><%= cliente.email.presence || "—" %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Cadastrado em</dt>
+    <dd class="mt-1 text-base text-gray-900"><%= format_date(cliente.created_at.to_date) %></dd>
+  </div>
+  <% if cliente.observacoes.present? %>
+    <div class="sm:col-span-2">
+      <dt class="text-sm font-medium text-gray-500">Observações</dt>
+      <dd class="mt-1 whitespace-pre-wrap text-base text-gray-900"><%= cliente.observacoes %></dd>
+    </div>
+  <% end %>
+</dl>
+<% if cliente.mesas_de_bilhar.any? %>
+  <div class="mt-6 border-t border-gray-100 pt-5">
+    <h3 class="mb-3 text-sm font-semibold text-emerald-900">Mesas (<%= cliente.mesas_de_bilhar.size %>)</h3>
+    <ul class="space-y-2">
+      <% cliente.mesas_de_bilhar.each do |mesa| %>
+        <li class="flex items-center justify-between rounded-lg bg-emerald-50/50 px-3 py-2 text-sm">
+          <span class="font-medium text-gray-800">Mesa <%= mesa.ordem %> — <%= mesa.numeracao %></span>
+          <span class="tabular-nums text-gray-600"><%= number_with_delimiter(mesa.registros, delimiter: ".") %> fichas</span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

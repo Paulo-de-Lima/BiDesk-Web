@@ -1,16 +1,25 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
+# This file should ensure the existence of records required to run the application in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
-# Criar admin padrão
-admin = Admin.find_or_create_by!(id: 1) do |a|
-  a.password = "admin123"
+admin_email = ENV.fetch("ADMIN_EMAIL", "admin@bidesk.local")
+admin_password = ENV["ADMIN_PASSWORD"].presence
+
+if Rails.env.production? && admin_password.blank?
+  abort "Defina ADMIN_PASSWORD antes de rodar seeds em produção."
 end
 
-puts "Admin criado com sucesso! Senha: admin123"
+admin_password ||= "admin123"
+
+admin = Admin.find_or_initialize_by(email: admin_email)
+admin.password = admin_password
+admin.save!
+
+unless Rails.env.production?
+  puts "Admin configurado para #{admin_email} (senha via ADMIN_PASSWORD ou padrão de desenvolvimento)."
+end
 
 # Criar alguns clientes de exemplo
-if Cliente.count == 0
+if Cliente.none?
   clientes = [
     { nome: "João Silva", telefone: "(11) 98765-4321", email: "joao@email.com", observacoes: "Cliente frequente" },
     { nome: "Maria Santos", telefone: "(11) 97654-3210", email: "maria@email.com", observacoes: "Prefere mesa 3" },
@@ -19,15 +28,13 @@ if Cliente.count == 0
     { nome: "Carlos Pereira", telefone: "(11) 94321-0987", email: "carlos@email.com" }
   ]
 
-  clientes.each do |cliente_data|
-    Cliente.create!(cliente_data)
-  end
+  clientes.each { |cliente_data| Cliente.create!(cliente_data) }
 
-  puts "#{clientes.count} clientes criados"
+  puts "#{clientes.size} clientes criados"
 end
 
 # Criar produtos de exemplo
-if Produto.count == 0
+if Produto.none?
   produtos = [
     { nome: "Coca-Cola 350ml", categoria: "Bebidas", quantidade: 50, preco: 5.00, valor_minimo: 10, descricao: "Refrigerante" },
     { nome: "Água Mineral 500ml", categoria: "Bebidas", quantidade: 30, preco: 3.00, valor_minimo: 15, descricao: "Água mineral" },
@@ -38,15 +45,13 @@ if Produto.count == 0
     { nome: "Salgadinhos", categoria: "Alimentos", quantidade: 20, preco: 4.50, valor_minimo: 10, descricao: "Pacote de salgadinhos" }
   ]
 
-  produtos.each do |produto_data|
-    Produto.create!(produto_data)
-  end
+  produtos.each { |produto_data| Produto.create!(produto_data) }
 
-  puts "#{produtos.count} produtos criados"
+  puts "#{produtos.size} produtos criados"
 end
 
 # Criar transações financeiras de exemplo
-if TransacaoFinanceira.count == 0
+if TransacaoFinanceira.none?
   hoje = Date.current
   transacoes = [
     { tipo: "receita", descricao: "Aluguel de mesas - Dia 1", valor: 250.00, data: hoje - 5.days, categoria: "Aluguel" },
@@ -59,15 +64,13 @@ if TransacaoFinanceira.count == 0
     { tipo: "receita", descricao: "Aluguel de mesas - Dia 3", valor: 280.00, data: hoje - 1.day, categoria: "Aluguel" }
   ]
 
-  transacoes.each do |transacao_data|
-    TransacaoFinanceira.create!(transacao_data)
-  end
+  transacoes.each { |transacao_data| TransacaoFinanceira.create!(transacao_data) }
 
-  puts "#{transacoes.count} transações financeiras criadas"
+  puts "#{transacoes.size} transações financeiras criadas"
 end
 
 # Criar manutenções de exemplo
-if Manutencao.count == 0
+if Manutencao.none?
   manutencoes = [
     { equipamento: "Mesa 1", descricao: "Troca de tecido e nivelamento", data: Date.current - 15.days, status: "concluida", custo: 800.00, observacoes: "Manutenção preventiva realizada" },
     { equipamento: "Mesa 2", descricao: "Reparo no sistema de bolsas", data: Date.current - 5.days, status: "em_andamento", custo: 350.00, observacoes: "Aguardando peças" },
@@ -76,12 +79,9 @@ if Manutencao.count == 0
     { equipamento: "Iluminação", descricao: "Troca de lâmpadas", data: Date.current - 10.days, status: "concluida", custo: 120.00 }
   ]
 
-  manutencoes.each do |manutencao_data|
-    Manutencao.create!(manutencao_data)
-  end
+  manutencoes.each { |manutencao_data| Manutencao.create!(manutencao_data) }
 
-  puts "#{manutencoes.count} manutenções criadas"
+  puts "#{manutencoes.size} manutenções criadas"
 end
 
-puts "\n✅ Seeds executados com sucesso!"
-puts "📝 Acesse a aplicação com a senha: admin123"
+puts "\n✅ Seeds executados com sucesso!" unless Rails.env.production?

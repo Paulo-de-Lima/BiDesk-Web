@@ -1,14 +1,8 @@
 class EstoqueController < ApplicationController
-  before_action :set_produto, only: [:show, :edit, :update, :destroy]
+  before_action :set_produto, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @produtos = if params[:busca].present?
-      Produto.buscar(params[:busca])
-    elsif params[:categoria].present?
-      Produto.por_categoria(params[:categoria])
-    else
-      Produto.all.order(:nome)
-    end
+    @produtos = Produto.lista_filtrada(params)
     @produtos_baixo_estoque = Produto.baixo_estoque
     @categorias = Produto.distinct.pluck(:categoria).compact
   end
@@ -22,22 +16,34 @@ class EstoqueController < ApplicationController
 
   def create
     @produto = Produto.new(produto_params)
-    if @produto.save
-      redirect_to estoque_path(@produto), notice: "Produto criado com sucesso!"
-    else
-      render :new, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @produto.save,
+      redirect_path: estoque_path(@produto),
+      notice: "Produto criado com sucesso!",
+      tbody_id: "estoque_tbody",
+      partial: "estoque/tbody",
+      locals: { produtos: Produto.lista_filtrada(params) }
+    )
+      return
     end
+    render :new, status: :unprocessable_entity
   end
 
   def edit
   end
 
   def update
-    if @produto.update(produto_params)
-      redirect_to estoque_path(@produto), notice: "Produto atualizado com sucesso!"
-    else
-      render :edit, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @produto.update(produto_params),
+      redirect_path: estoque_path(@produto),
+      notice: "Produto atualizado com sucesso!",
+      tbody_id: "estoque_tbody",
+      partial: "estoque/tbody",
+      locals: { produtos: Produto.lista_filtrada(params) }
+    )
+      return
     end
+    render :edit, status: :unprocessable_entity
   end
 
   def destroy

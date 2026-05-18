@@ -1,10 +1,17 @@
-<div class="mb-8">
-  <h1 class="text-3xl font-bold text-gray-900">Nova mesa de bilhar</h1>
-  <p class="mt-2 text-gray-600">
-    Cliente: <span class="font-semibold text-gray-800"><%= @cliente.nome %></span>
-  </p>
-</div>
-
-<div class="rounded-xl bg-white p-8 shadow-md">
-  <%= render "form", mesa: @mesa %>
-</div>
+<% if modal_frame_request? %>
+  <%= render "shared/modal_response", icon: :create, title: "Nova mesa", subtitle: "Cliente: #{@cliente.nome}" do %>
+    <%= render "form", mesa: @mesa, modal: true %>
+  <% end %>
+<% else %>
+  <% content_for :title, "Nova Mesa | BiDesk" %>
+  <% ui_page_shell %>
+  <% ui_page_header(
+    breadcrumbs: [{ label: "Dashboard", path: root_path }, { label: "Clientes", path: clientes_path }, { label: @cliente.nome, path: cliente_path(@cliente) }, { label: "Nova mesa" }],
+    title: "Nova mesa de bilhar",
+    subtitle: "Cliente: #{@cliente.nome}",
+    icon: :mesa
+  ) %>
+  <%= render layout: "shared/form_card" do %>
+    <%= render "form", mesa: @mesa, modal: false %>
+  <% end %>
+<% end %>

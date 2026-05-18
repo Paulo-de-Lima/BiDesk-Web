@@ -1,0 +1,24 @@
+<%# locals: (transacao:) %>
+<span class="mb-4 inline-flex items-center rounded-full px-3 py-1 text-xs font-medium <%= transacao.tipo == "receita" ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800" %>">
+  <%= transacao.tipo == "receita" ? "Receita" : "Despesa" %>
+</span>
+<dl class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Data</dt>
+    <dd class="mt-1 text-base font-medium text-gray-900"><%= format_date(transacao.data) %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Categoria</dt>
+    <dd class="mt-1 text-base text-gray-900"><%= transacao.categoria %></dd>
+  </div>
+  <div class="sm:col-span-2">
+    <dt class="text-sm font-medium text-gray-500">Descrição</dt>
+    <dd class="mt-1 text-base text-gray-900"><%= transacao.descricao %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Valor</dt>
+    <dd class="mt-1 text-xl font-bold <%= transacao.tipo == "receita" ? "text-emerald-600" : "text-red-600" %>">
+      <%= transacao.tipo == "receita" ? "+" : "-" %><%= format_currency(transacao.valor) %>
+    </dd>
+  </div>
+</dl>

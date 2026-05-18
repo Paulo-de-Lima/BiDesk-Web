@@ -1,0 +1,31 @@
+<%# locals: (manutencao:, modal: false) %>
+<%= form_with model: manutencao, url: manutencao.persisted? ? manutencao_path(manutencao) : manutencao_index_path, class: "space-y-6" do |f| %>
+  <%= render "shared/form_errors", record: manutencao %>
+  <div>
+    <%= f.label :equipamento, "Equipamento *", class: ui_label_class %>
+    <%= f.text_field :equipamento, class: ui_input_class, placeholder: "Ex: Mesa 1, Taco, Bola", required: true %>
+  </div>
+  <div>
+    <%= f.label :descricao, "Descrição *", class: ui_label_class %>
+    <%= f.text_area :descricao, rows: 4, class: ui_input_class, required: true %>
+  </div>
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div>
+      <%= f.label :data, "Data *", class: ui_label_class %>
+      <%= f.date_field :data, class: ui_input_class, required: true %>
+    </div>
+    <div>
+      <%= f.label :status, "Status *", class: ui_label_class %>
+      <%= f.select :status, options_for_select([["Pendente", "pendente"], ["Em Andamento", "em_andamento"], ["Concluída", "concluida"], ["Cancelada", "cancelada"]], manutencao.status), {}, { class: ui_select_class, required: true } %>
+    </div>
+  </div>
+  <div>
+    <%= f.label :custo, "Custo", class: ui_label_class %>
+    <%= f.number_field :custo, step: 0.01, class: ui_input_class, min: 0 %>
+  </div>
+  <div>
+    <%= f.label :observacoes, "Observações", class: ui_label_class %>
+    <%= f.text_area :observacoes, rows: 3, class: ui_input_class %>
+  </div>
+  <%= render "shared/form_actions", cancel_path: manutencao_index_path, submit_label: manutencao.persisted? ? "Atualizar" : "Salvar", modal: modal %>
+<% end %>

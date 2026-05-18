@@ -1,0 +1,29 @@
+<%# locals: (manutencao:) %>
+<% status_colors = { "pendente" => "bg-amber-100 text-amber-800", "em_andamento" => "bg-blue-100 text-blue-800", "concluida" => "bg-emerald-100 text-emerald-800", "cancelada" => "bg-red-100 text-red-800" } %>
+<span class="mb-4 inline-flex items-center rounded-full px-3 py-1 text-xs font-medium <%= status_colors[manutencao.status] || "bg-gray-100 text-gray-800" %>">
+  <%= manutencao.status.humanize %>
+</span>
+<dl class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Equipamento</dt>
+    <dd class="mt-1 text-base font-semibold text-gray-900"><%= manutencao.equipamento %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Data</dt>
+    <dd class="mt-1 text-base text-gray-900"><%= format_date(manutencao.data) %></dd>
+  </div>
+  <div>
+    <dt class="text-sm font-medium text-gray-500">Custo</dt>
+    <dd class="mt-1 text-base font-medium text-gray-900"><%= manutencao.custo ? format_currency(manutencao.custo) : "—" %></dd>
+  </div>
+  <div class="sm:col-span-2">
+    <dt class="text-sm font-medium text-gray-500">Descrição</dt>
+    <dd class="mt-1 whitespace-pre-wrap text-base text-gray-900"><%= manutencao.descricao %></dd>
+  </div>
+  <% if manutencao.observacoes.present? %>
+    <div class="sm:col-span-2">
+      <dt class="text-sm font-medium text-gray-500">Observações</dt>
+      <dd class="mt-1 whitespace-pre-wrap text-base text-gray-900"><%= manutencao.observacoes %></dd>
+    </div>
+  <% end %>
+</dl>

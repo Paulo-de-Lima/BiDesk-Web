@@ -1,0 +1,40 @@
+# Rails
+/.bundle
+/vendor/bundle
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+/storage/*
+!/storage/.keep
+/public/assets
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+
+# Credentials
+/config/master.key
+/config/credentials/*.key
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# Coverage / reports
+/coverage/
+/spec/tmp/
+
+# Bootsnap
+/tmp/cache/bootsnap

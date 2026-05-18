@@ -1,0 +1,3 @@
+one:
+  email: admin@bidesk.local
+  password_digest: <%= BCrypt::Password.create("password123") %>

@@ -1,0 +1,13 @@
+<%# locals: (cancel_path:, submit_label: "Salvar", modal: false) %>
+<% wrapper_class = modal ? "form-modal-actions sticky bottom-0 -mx-6 -mb-6 mt-8 flex flex-wrap justify-end gap-3 border-t border-emerald-100/90 bg-gradient-to-t from-white via-white/98 to-transparent px-6 py-4 backdrop-blur-sm" : "flex flex-wrap justify-end gap-3 border-t border-gray-100 pt-6" %>
+<div class="<%= wrapper_class %>">
+  <% if modal %>
+    <button type="button" data-close-form-modal class="inline-flex items-center rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600">
+      Cancelar
+    </button>
+    <%= submit_tag submit_label, class: "inline-flex items-center rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-800 px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-700/25 transition hover:from-emerald-800 hover:to-emerald-900 hover:shadow-lg hover:shadow-emerald-700/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2" %>
+  <% else %>
+    <%= link_to "Cancelar", cancel_path, class: "inline-flex items-center rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600" %>
+    <%= submit_tag submit_label, class: "inline-flex items-center rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2" %>
+  <% end %>
+</div>

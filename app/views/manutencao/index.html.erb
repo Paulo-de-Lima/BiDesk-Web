@@ -1,130 +1,62 @@
-  <div class="mb-8 flex justify-between items-center">
-    <div>
-      <h1 class="text-3xl font-bold text-gray-900">Manutenção</h1>
-      <p class="mt-2 text-gray-600">Controle de manutenções dos equipamentos</p>
+<% content_for :title, "Manutenção | BiDesk" %>
+<% ui_page_shell %>
+<% ui_page_header(
+  breadcrumbs: [{ label: "Dashboard", path: root_path }, { label: "Manutenção" }],
+  title: "Manutenção",
+  subtitle: "Controle de manutenções dos equipamentos",
+  icon: :manutencao
+) %>
+
+<div class="mb-5 flex flex-wrap items-center gap-2">
+  <%= ui_badge_count(manutencao_filtros_ativos? ? pluralize(@manutencoes.count, "registro encontrado", "registros encontrados") : "Total de #{pluralize(@manutencoes.count, 'registro', 'registros')}") %>
+  <%= ui_filters_active_chip if manutencao_filtros_ativos? %>
+</div>
+
+<div class="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+  <% [
+    { label: "Pendentes", value: @pendentes, color: "text-amber-600" },
+    { label: "Em andamento", value: @em_andamento, color: "text-emerald-600" },
+    { label: "Concluídas", value: @concluidas, color: "text-emerald-700" },
+    { label: "Total", value: @manutencoes.count, color: "text-gray-900" }
+  ].each do |stat| %>
+    <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+      <p class="text-sm text-gray-600"><%= stat[:label] %></p>
+      <p class="text-2xl font-bold <%= stat[:color] %>"><%= stat[:value] %></p>
     </div>
-    <%= link_to new_manutencao_path, class: "inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition" do %>
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-      </svg>
+  <% end %>
+</div>
+
+<%= render layout: "shared/page_toolbar" do %>
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between" data-filter-toolbar>
+    <%= form_with url: manutencao_index_path, method: :get, local: true, class: "flex min-w-0 flex-1 flex-wrap items-center gap-3", data: { filter_form: true } do |f| %>
+      <%= f.select :status, options_for_select([["Todos os status", ""], ["Pendente", "pendente"], ["Em Andamento", "em_andamento"], ["Concluída", "concluida"], ["Cancelada", "cancelada"]], params[:status]), {}, { class: ui_select_class, onchange: "this.form.requestSubmit()" } %>
+      <%= f.select :equipamento, options_for_select([["Todos os equipamentos", ""]] + @equipamentos.map { |e| [e, e] }, params[:equipamento]), {}, { class: ui_select_class, onchange: "this.form.requestSubmit()" } %>
+      <%= ui_filter_submit %>
+      <%= ui_filter_clear(manutencao_index_path) if manutencao_filtros_ativos? %>
+    <% end %>
+    <%= ui_modal_link new_manutencao_path, class: ui_btn_primary_class do %>
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
       Nova Manutenção
     <% end %>
   </div>
+<% end %>
 
-  <!-- Estatísticas -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-    <div class="bg-white rounded-lg shadow p-4">
-      <p class="text-sm text-gray-600">Pendentes</p>
-      <p class="text-2xl font-bold text-yellow-600"><%= @pendentes %></p>
-    </div>
-    <div class="bg-white rounded-lg shadow p-4">
-      <p class="text-sm text-gray-600">Em Andamento</p>
-      <p class="text-2xl font-bold text-green-600"><%= @em_andamento %></p>
-    </div>
-    <div class="bg-white rounded-lg shadow p-4">
-      <p class="text-sm text-gray-600">Concluídas</p>
-      <p class="text-2xl font-bold text-green-600"><%= @concluidas %></p>
-    </div>
-    <div class="bg-white rounded-lg shadow p-4">
-      <p class="text-sm text-gray-600">Total</p>
-      <p class="text-2xl font-bold text-gray-900"><%= @manutencoes.count %></p>
-    </div>
-  </div>
-
-  <!-- Filtros -->
-  <div class="mb-6 flex gap-4 flex-wrap">
-    <%= form_with url: manutencao_index_path, method: :get, local: true, class: "flex gap-4 flex-1" do |f| %>
-      <%= f.select :status, 
-          options_for_select([["Todos os status", ""], ["Pendente", "pendente"], ["Em Andamento", "em_andamento"], ["Concluída", "concluida"], ["Cancelada", "cancelada"]], params[:status]),
-          {},
-          { class: "px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" } %>
-      <%= f.select :equipamento, 
-          options_for_select([["Todos os equipamentos", ""]] + @equipamentos.map { |e| [e, e] }, params[:equipamento]),
-          {},
-          { class: "px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" } %>
-      <%= f.submit "Filtrar", class: "px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition" %>
-      <% if params[:status].present? || params[:equipamento].present? %>
-        <%= link_to "Limpar", manutencao_index_path, class: "px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition" %>
-      <% end %>
-    <% end %>
-  </div>
-
-  <!-- Tabela de Manutenções -->
-  <div class="bg-white rounded-xl shadow-md overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Equipamento</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Descrição</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Custo</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <% if @manutencoes.any? %>
-            <% @manutencoes.each do |manutencao| %>
-              <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900"><%= manutencao.equipamento %></div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="text-sm text-gray-900"><%= truncate(manutencao.descricao, length: 50) %></div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <%= format_date(manutencao.data) %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <% status_colors = {
-                    "pendente" => "bg-yellow-100 text-yellow-800",
-                    "em_andamento" => "bg-blue-100 text-green-800",
-                    "concluida" => "bg-green-100 text-green-800",
-                    "cancelada" => "bg-red-100 text-red-800"
-                  } %>
-                  <span class="px-2 py-1 text-xs font-medium rounded-full <%= status_colors[manutencao.status] || 'bg-gray-100 text-gray-800' %>">
-                    <%= manutencao.status.humanize %>
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  <%= manutencao.custo ? format_currency(manutencao.custo) : "-" %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <div class="flex space-x-2">
-                    <%= link_to manutencao_path(manutencao), class: "text-green-600 hover:text-green-900" do %>
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                      </svg>
-                    <% end %>
-                    <%= link_to edit_manutencao_path(manutencao), class: "text-yellow-600 hover:text-yellow-900" do %>
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                      </svg>
-                    <% end %>
-                    <%= button_to manutencao_path(manutencao),
-                        method: :delete,
-                        data: { turbo_confirm: "Tem certeza que deseja excluir esta manutenção?" },
-                        form: { class: "inline" },
-                        class: "text-red-600 hover:text-red-900 bg-transparent border-0 p-0 cursor-pointer" do %>
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                      </svg>
-                    <% end %>
-                  </div>
-                </td>
-              </tr>
-            <% end %>
-          <% else %>
-            <tr>
-              <td colspan="6" class="px-6 py-12 text-center text-gray-500">
-                <p>Nenhuma manutenção encontrada</p>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+  <div class="overflow-x-auto">
+    <table class="min-w-full">
+      <thead>
+        <tr class="border-b border-gray-200">
+          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Equipamento</th>
+          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Descrição</th>
+          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Data</th>
+          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Status</th>
+          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Custo</th>
+          <th scope="col" class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-400">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="manutencao_tbody" class="divide-y divide-gray-100">
+        <%= render "tbody", manutencoes: @manutencoes %>
+      </tbody>
+    </table>
   </div>
 </div>

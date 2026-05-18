@@ -1,0 +1,37 @@
+<%# locals: (breadcrumbs: [], title:, subtitle: nil, icon_path:) %>
+<div class="w-screen border-b border-emerald-100 bg-emerald-50 relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <% if breadcrumbs.present? %>
+      <nav aria-label="Breadcrumb" class="mb-5">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-emerald-700">
+          <% breadcrumbs.each_with_index do |item, index| %>
+            <% if index.positive? %>
+              <li aria-hidden="true" class="text-emerald-400">&gt;</li>
+            <% end %>
+            <li class="<%= index == breadcrumbs.length - 1 && !item[:path] ? "max-w-[min(100%,20rem)] truncate font-medium text-emerald-900" : "" %>" <%= %(aria-current="page") if index == breadcrumbs.length - 1 && !item[:path] %>>
+              <% if item[:path] %>
+                <%= link_to item[:label], item[:path], class: "hover:text-emerald-900 transition" %>
+              <% else %>
+                <%= item[:label] %>
+              <% end %>
+            </li>
+          <% end %>
+        </ol>
+      </nav>
+    <% end %>
+
+    <div class="flex items-start gap-4">
+      <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-800 shadow-sm">
+        <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= icon_path %>"></path>
+        </svg>
+      </div>
+      <div class="min-w-0">
+        <h1 class="text-3xl font-bold tracking-tight text-emerald-900 sm:text-4xl"><%= title %></h1>
+        <% if subtitle.present? %>
+          <p class="mt-1 text-base text-emerald-700/80"><%= subtitle %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

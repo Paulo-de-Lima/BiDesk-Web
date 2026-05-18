@@ -1,37 +1,49 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
+<% content_for :title, "Entrar | BiDesk" %>
+<% content_for :body_class, "bg-emerald-50" %>
+
+<div class="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6">
+  <div class="w-full max-w-md space-y-8">
     <div class="text-center">
-      <div class="flex justify-center">
-        <div class="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-full">
-          <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
+      <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-800 shadow-sm">
+        <svg class="h-9 w-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
       </div>
-      <h2 class="mt-6 text-4xl font-extrabold text-white">BiDesk</h2>
-      <p class="mt-2 text-sm text-gray-300">Sistema de gestão para sua empresa de bilhar</p>
+      <h1 class="mt-6 text-3xl font-bold tracking-tight text-emerald-900">BiDesk</h1>
+      <p class="mt-2 text-sm text-emerald-700/80">Sistema de gestão para sua empresa de bilhar</p>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-2xl p-8 space-y-6">
+    <% if alert %>
+      <div class="rounded-xl border border-red-200 bg-red-50 p-4" role="alert">
+        <p class="text-sm font-semibold text-red-800"><%= alert %></p>
+        <p class="mt-1 text-sm text-red-700">Verifique a senha e tente novamente. Se o problema persistir, contate o administrador.</p>
+      </div>
+    <% end %>
+
+    <div class="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
       <%= form_with url: login_path, local: true, class: "space-y-6" do |f| %>
         <div>
-          <%= f.label :password, "Senha", class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= f.password_field :password, 
-              class: "appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm",
+          <%= f.label :email, "E-mail", class: ui_label_class %>
+          <%= f.email_field :email,
+              value: params[:email],
+              class: ui_input_class,
+              placeholder: "admin@bidesk.local",
+              required: true,
+              autofocus: true,
+              autocomplete: "username" %>
+        </div>
+        <div>
+          <%= f.label :password, "Senha", class: ui_label_class %>
+          <%= f.password_field :password,
+              class: ui_input_class,
               placeholder: "Digite sua senha",
               required: true,
-              autofocus: true %>
+              autocomplete: "current-password" %>
         </div>
-
-        <div>
-          <%= f.submit "Entrar", class: "group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition transform hover:scale-105" %>
-        </div>
+        <%= f.submit "Entrar", class: "w-full rounded-xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2" %>
       <% end %>
     </div>
 
-    <p class="text-center text-sm text-gray-400">
-      Acesso restrito ao administrador
-    </p>
+    <p class="text-center text-sm text-emerald-700/70">Acesso restrito ao administrador</p>
   </div>
 </div>
-

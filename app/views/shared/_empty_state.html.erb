@@ -1,0 +1,21 @@
+<%# locals: (title:, description: nil, filtered: false, clear_path: nil, action_label: nil, action_path: nil, icon_path: nil, action_modal: false) %>
+<div class="px-6 py-16 text-center sm:px-8">
+  <% if icon_path.present? %>
+    <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= icon_path %>"></path>
+    </svg>
+  <% end %>
+  <p class="mt-4 text-base font-medium text-gray-900"><%= title %></p>
+  <% if description.present? %>
+    <p class="mt-1 text-sm text-gray-500"><%= description %></p>
+  <% end %>
+  <% if filtered && clear_path %>
+    <%= link_to "Limpar busca e filtros", clear_path, class: "mt-4 inline-block text-sm font-medium text-emerald-700 hover:underline" %>
+  <% elsif action_label && action_path %>
+    <% if action_modal %>
+      <%= ui_modal_link action_label, action_path, class: "mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800" %>
+    <% else %>
+      <%= link_to action_label, action_path, class: "mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800" %>
+    <% end %>
+  <% end %>
+</div>

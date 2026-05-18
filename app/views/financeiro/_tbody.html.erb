@@ -1,0 +1,42 @@
+<%# locals: (transacoes:) %>
+<% if transacoes.any? %>
+  <% transacoes.each do |transacao| %>
+    <tr>
+      <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600"><%= format_date(transacao.data) %></td>
+      <td class="whitespace-nowrap px-6 py-4">
+        <span class="rounded-full px-2.5 py-1 text-xs font-medium <%= transacao.tipo == "receita" ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800" %>">
+          <%= transacao.tipo == "receita" ? "Receita" : "Despesa" %>
+        </span>
+      </td>
+      <td class="px-6 py-4 text-sm text-gray-800"><%= transacao.descricao %></td>
+      <td class="whitespace-nowrap px-6 py-4">
+        <span class="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"><%= transacao.categoria %></span>
+      </td>
+      <td class="whitespace-nowrap px-6 py-4 text-sm font-bold <%= transacao.tipo == "receita" ? "text-emerald-600" : "text-red-600" %>">
+        <%= transacao.tipo == "receita" ? "+" : "-" %><%= format_currency(transacao.valor) %>
+      </td>
+      <td class="whitespace-nowrap px-6 py-4 text-right">
+        <%= render "shared/table_actions",
+            show_path: financeiro_path(transacao),
+            edit_path: edit_financeiro_path(transacao),
+            destroy_path: financeiro_path(transacao),
+            record_name: transacao.descricao,
+            use_modal: true %>
+      </td>
+    </tr>
+  <% end %>
+<% else %>
+  <tr>
+    <td colspan="6">
+      <%= render "shared/empty_state",
+          title: "Nenhuma transação encontrada",
+          description: financeiro_filtros_ativos? ? "Altere o tipo ou a categoria do filtro." : "Registre receitas e despesas para acompanhar o caixa.",
+          filtered: financeiro_filtros_ativos?,
+          clear_path: financeiro_index_path,
+          action_label: "Registrar movimentação",
+          action_path: new_financeiro_path,
+          action_modal: true,
+          icon_path: ui_icon_path(:financeiro) %>
+    </td>
+  </tr>
+<% end %>

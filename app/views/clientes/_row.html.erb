@@ -1,0 +1,38 @@
+<%# locals: (cliente:) %>
+<% row_id = dom_id(cliente) %>
+<tr class="transition-colors hover:bg-emerald-50/30">
+  <td class="whitespace-nowrap px-6 py-4">
+    <button type="button"
+        data-cliente-expand="<%= row_id %>"
+        data-no-row-nav
+        aria-expanded="false"
+        aria-controls="<%= row_id %>-mesas"
+        class="group flex w-full items-center gap-2 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg -m-1 p-1">
+      <svg data-chevron class="h-4 w-4 shrink-0 text-emerald-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+      <span class="text-sm font-semibold text-gray-800 group-hover:text-emerald-800"><%= cliente.nome %></span>
+      <% if cliente.mesas_de_bilhar.any? %>
+        <span class="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
+          <%= pluralize(cliente.mesas_de_bilhar.size, "mesa", "mesas") %>
+        </span>
+      <% end %>
+    </button>
+  </td>
+  <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600"><%= cliente.telefone %></td>
+  <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600"><%= cliente.email.presence || "—" %></td>
+  <td class="whitespace-nowrap px-6 py-4 text-right">
+    <%= render "shared/table_actions",
+        show_path: cliente_path(cliente),
+        edit_path: edit_cliente_path(cliente),
+        destroy_path: cliente_path(cliente),
+        record_name: cliente.nome,
+        use_modal: true,
+        confirm_detail: cliente.mesas_de_bilhar.any? ? "As #{cliente.mesas_de_bilhar.size} mesa(s) vinculada(s) também serão removidas." : nil %>
+  </td>
+</tr>
+<tr id="<%= row_id %>-mesas" data-cliente-mesas-row class="hidden bg-emerald-50/20">
+  <td colspan="4" class="px-6 py-4">
+    <%= render "clientes/mesas_panel", cliente: cliente %>
+  </td>
+</tr>

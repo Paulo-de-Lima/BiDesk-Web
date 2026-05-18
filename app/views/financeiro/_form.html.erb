@@ -1,0 +1,27 @@
+<%# locals: (transacao:, modal: false) %>
+<%= form_with model: transacao, url: transacao.persisted? ? financeiro_path(transacao) : financeiro_index_path, class: "space-y-6" do |f| %>
+  <%= render "shared/form_errors", record: transacao %>
+    <div>
+    <%= f.label :tipo, "Tipo *", class: ui_label_class %>
+    <%= f.select :tipo, options_for_select([["Receita", "receita"], ["Despesa", "despesa"]], transacao.tipo), {}, { class: ui_select_class, required: true } %>
+  </div>
+  <div>
+    <%= f.label :descricao, "Descrição *", class: ui_label_class %>
+    <%= f.text_field :descricao, class: ui_input_class, required: true %>
+  </div>
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div>
+      <%= f.label :valor, "Valor *", class: ui_label_class %>
+      <%= f.number_field :valor, step: 0.01, class: ui_input_class, min: 0.01, required: true %>
+    </div>
+    <div>
+      <%= f.label :data, "Data *", class: ui_label_class %>
+      <%= f.date_field :data, class: ui_input_class, required: true %>
+    </div>
+  </div>
+  <div>
+    <%= f.label :categoria, "Categoria *", class: ui_label_class %>
+    <%= f.text_field :categoria, class: ui_input_class, placeholder: "Ex: Vendas, Aluguel, Manutenção", required: true %>
+  </div>
+  <%= render "shared/form_actions", cancel_path: financeiro_index_path, submit_label: transacao.persisted? ? "Atualizar" : "Salvar", modal: modal %>
+<% end %>

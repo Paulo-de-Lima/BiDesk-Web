@@ -1,25 +1,19 @@
 class FinanceiroController < ApplicationController
-  before_action :set_transacao, only: [:show, :edit, :update, :destroy]
+  before_action :set_transacao, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @transacoes = if params[:tipo].present?
-      TransacaoFinanceira.where(tipo: params[:tipo]).recentes
-    elsif params[:categoria].present?
-      TransacaoFinanceira.por_categoria(params[:categoria]).recentes
-    else
-      TransacaoFinanceira.recentes
-    end
-    
+    @transacoes = TransacaoFinanceira.lista_filtrada(params)
+
     mes_atual = Date.current.month
     ano_atual = Date.current.year
     @receitas_mes = TransacaoFinanceira.receitas.por_mes(ano_atual, mes_atual).sum(:valor)
     @despesas_mes = TransacaoFinanceira.despesas.por_mes(ano_atual, mes_atual).sum(:valor)
     @saldo_mes = @receitas_mes - @despesas_mes
-    
+
     @receitas_total = TransacaoFinanceira.receitas.sum(:valor)
     @despesas_total = TransacaoFinanceira.despesas.sum(:valor)
     @saldo_total = @receitas_total - @despesas_total
-    
+
     @categorias = TransacaoFinanceira.distinct.pluck(:categoria).compact
   end
 
@@ -33,22 +27,34 @@ class FinanceiroController < ApplicationController
 
   def create
     @transacao = TransacaoFinanceira.new(transacao_params)
-    if @transacao.save
-      redirect_to financeiro_index_path, notice: "Transação registrada com sucesso!"
-    else
-      render :new, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @transacao.save,
+      redirect_path: financeiro_index_path,
+      notice: "Transação registrada com sucesso!",
+      tbody_id: "financeiro_tbody",
+      partial: "financeiro/tbody",
+      locals: { transacoes: TransacaoFinanceira.lista_filtrada(params) }
+    )
+      return
     end
+    render :new, status: :unprocessable_entity
   end
 
   def edit
   end
 
   def update
-    if @transacao.update(transacao_params)
-      redirect_to financeiro_index_path, notice: "Transação atualizada com sucesso!"
-    else
-      render :edit, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @transacao.update(transacao_params),
+      redirect_path: financeiro_index_path,
+      notice: "Transação atualizada com sucesso!",
+      tbody_id: "financeiro_tbody",
+      partial: "financeiro/tbody",
+      locals: { transacoes: TransacaoFinanceira.lista_filtrada(params) }
+    )
+      return
     end
+    render :edit, status: :unprocessable_entity
   end
 
   def destroy

@@ -1,0 +1,34 @@
+<%# locals: (produto:, modal: false) %>
+<%= form_with model: produto, url: produto.persisted? ? estoque_path(produto) : estoque_index_path, class: "space-y-6" do |f| %>
+  <%= render "shared/form_errors", record: produto %>
+  <div>
+    <%= f.label :nome, "Nome do Produto *", class: ui_label_class %>
+    <%= f.text_field :nome, class: ui_input_class, required: true %>
+  </div>
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div>
+      <%= f.label :categoria, "Categoria", class: ui_label_class %>
+      <%= f.text_field :categoria, class: ui_input_class, placeholder: "Ex: Bebidas, Acessórios" %>
+    </div>
+    <div>
+      <%= f.label :quantidade, "Quantidade *", class: ui_label_class %>
+      <%= f.number_field :quantidade, class: ui_input_class, min: 0, required: true %>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div>
+      <%= f.label :preco, "Preço *", class: ui_label_class %>
+      <%= f.number_field :preco, step: 0.01, class: ui_input_class, min: 0, required: true %>
+    </div>
+    <div>
+      <%= f.label :valor_minimo, "Estoque Mínimo *", class: ui_label_class %>
+      <%= f.number_field :valor_minimo, class: ui_field_class(produto, :valor_minimo), min: 0, required: true, data: { field_error: produto.errors.include?(:valor_minimo) } %>
+      <%= render "shared/field_hint", id: "produto-valor-minimo-hint", text: "Quantidade mínima antes de alertar estoque baixo na listagem." %>
+    </div>
+  </div>
+  <div>
+    <%= f.label :descricao, "Descrição", class: ui_label_class %>
+    <%= f.text_area :descricao, rows: 4, class: ui_input_class %>
+  </div>
+  <%= render "shared/form_actions", cancel_path: estoque_index_path, submit_label: produto.persisted? ? "Atualizar" : "Salvar", modal: modal %>
+<% end %>

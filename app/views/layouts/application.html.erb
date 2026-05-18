@@ -16,36 +16,28 @@
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body class="bg-gray-50 min-h-screen">
+  <body class="min-h-screen <%= content_for?(:body_class) ? yield(:body_class) : "bg-gray-50" %>">
     <% unless controller_name == "sessions" %>
       <%= render "layouts/navbar" %>
     <% end %>
 
-    <main class="<%= controller_name == "sessions" ? "" : "pt-20" %>">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <% if notice %>
-          <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-4 rounded-lg shadow-sm">
-            <div class="flex items-center justify-between gap-4">
-              <div class="ml-3">
-                <p class="text-sm font-medium text-green-800"><%= notice %></p>
-              </div>
-              <% if flash[:undo_manutencao] %>
-                <%= button_to "Desfazer", undo_destroy_manutencao_index_path, method: :post, class: "shrink-0 inline-flex items-center px-3 py-1.5 rounded-md bg-white text-green-700 text-sm font-medium border border-green-200 hover:bg-green-100 transition" %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-        <% if alert %>
-          <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-lg shadow-sm">
-            <div class="flex">
-              <div class="ml-3">
-                <p class="text-sm font-medium text-red-800"><%= alert %></p>
-              </div>
-            </div>
-          </div>
-        <% end %>
+    <main class="<%= controller_name == "sessions" ? "" : "pt-16" %>">
+      <% unless controller_name == "sessions" %>
+        <div id="flash-messages">
+          <%= render "shared/flash" %>
+        </div>
+      <% end %>
+
+      <%= yield :page_header %>
+
+      <div class="<%= content_for?(:page_layout) ? yield(:page_layout) : "mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8" %>">
         <%= yield %>
       </div>
     </main>
+
+    <% unless controller_name == "sessions" %>
+      <%= turbo_frame_tag "resource_modal" %>
+      <%= render "shared/confirm_delete_modal" %>
+    <% end %>
   </body>
 </html>

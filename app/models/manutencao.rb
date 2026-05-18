@@ -11,6 +11,13 @@ class Manutencao < ApplicationRecord
   scope :por_equipamento, ->(eq) { where(equipamento: eq) }
   scope :recentes, -> { order(data: :desc) }
 
+  def self.lista_filtrada(params)
+    scope = recentes
+    scope = scope.where(status: params[:status]) if params[:status].present?
+    scope = scope.por_equipamento(params[:equipamento]) if params[:equipamento].present?
+    scope
+  end
+
   def concluida?
     status == "concluida"
   end

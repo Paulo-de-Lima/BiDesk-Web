@@ -1,0 +1,35 @@
+<% modal = local_assigns.fetch(:modal, false) %>
+<%= form_with model: cliente, class: "space-y-6" do |f| %>
+  <%= render "shared/form_errors", record: cliente, title: "Erro ao salvar cliente:" %>
+
+  <div>
+    <%= f.label :nome, "Nome *", class: ui_label_class %>
+    <%= f.text_field :nome, class: ui_field_class(cliente, :nome), required: true, data: { field_error: cliente.errors.include?(:nome) } %>
+    <% if cliente.errors.include?(:nome) %>
+      <p class="mt-1 text-sm text-red-600" role="alert"><%= cliente.errors[:nome].first %></p>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :telefone, "Telefone *", class: ui_label_class %>
+    <%= f.text_field :telefone, class: ui_field_class(cliente, :telefone), required: true, placeholder: "(00) 00000-0000", data: { field_error: cliente.errors.include?(:telefone) } %>
+    <% if cliente.errors.include?(:telefone) %>
+      <p class="mt-1 text-sm text-red-600" role="alert"><%= cliente.errors[:telefone].first %></p>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :email, "Email", class: ui_label_class %>
+    <%= f.email_field :email, class: ui_field_class(cliente, :email), placeholder: "email@exemplo.com", data: { field_error: cliente.errors.include?(:email) } %>
+    <% if cliente.errors.include?(:email) %>
+      <p class="mt-1 text-sm text-red-600" role="alert"><%= cliente.errors[:email].first %></p>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :observacoes, "Observações", class: ui_label_class %>
+    <%= f.text_area :observacoes, rows: 4, class: ui_field_class(cliente, :observacoes) %>
+  </div>
+
+  <%= render "shared/form_actions", cancel_path: clientes_path, submit_label: local_assigns.fetch(:submit_label, "Salvar"), modal: modal %>
+<% end %>

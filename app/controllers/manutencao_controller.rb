@@ -1,15 +1,9 @@
 class ManutencaoController < ApplicationController
-  before_action :set_manutencao, only: [:show, :edit, :update, :destroy]
+  before_action :set_manutencao, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @manutencoes = if params[:status].present?
-      Manutencao.where(status: params[:status]).recentes
-    elsif params[:equipamento].present?
-      Manutencao.por_equipamento(params[:equipamento]).recentes
-    else
-      Manutencao.recentes
-    end
-    
+    @manutencoes = Manutencao.lista_filtrada(params)
+
     @pendentes = Manutencao.pendentes.count
     @em_andamento = Manutencao.em_andamento.count
     @concluidas = Manutencao.concluidas.count
@@ -27,22 +21,34 @@ class ManutencaoController < ApplicationController
 
   def create
     @manutencao = Manutencao.new(manutencao_params)
-    if @manutencao.save
-      redirect_to manutencao_path(@manutencao), notice: "Manutenção registrada com sucesso!"
-    else
-      render :new, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @manutencao.save,
+      redirect_path: manutencao_path(@manutencao),
+      notice: "Manutenção registrada com sucesso!",
+      tbody_id: "manutencao_tbody",
+      partial: "manutencao/tbody",
+      locals: { manutencoes: Manutencao.lista_filtrada(params) }
+    )
+      return
     end
+    render :new, status: :unprocessable_entity
   end
 
   def edit
   end
 
   def update
-    if @manutencao.update(manutencao_params)
-      redirect_to manutencao_path(@manutencao), notice: "Manutenção atualizada com sucesso!"
-    else
-      render :edit, status: :unprocessable_entity
+    if respond_with_modal_save(
+      success: @manutencao.update(manutencao_params),
+      redirect_path: manutencao_path(@manutencao),
+      notice: "Manutenção atualizada com sucesso!",
+      tbody_id: "manutencao_tbody",
+      partial: "manutencao/tbody",
+      locals: { manutencoes: Manutencao.lista_filtrada(params) }
+    )
+      return
     end
+    render :edit, status: :unprocessable_entity
   end
 
   def destroy

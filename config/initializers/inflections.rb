@@ -18,4 +18,3 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular "mesa_de_bilhar", "mesas_de_bilhar"
 end
-
