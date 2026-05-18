@@ -21,18 +21,23 @@
       <%= render "layouts/navbar" %>
     <% end %>
 
-    <main class="<%= controller_name == "sessions" ? "" : "pt-16" %>">
+    <main class="<%= controller_name == "sessions" ? "min-h-screen" : "pt-16" %>">
       <% unless controller_name == "sessions" %>
-        <div id="flash-messages">
-          <%= render "shared/flash" %>
+        <div class="app-page-chrome">
+          <div id="flash-messages">
+            <%= render "shared/flash" %>
+          </div>
+          <%= yield :page_header %>
         </div>
       <% end %>
 
-      <%= yield :page_header %>
-
-      <div class="<%= content_for?(:page_layout) ? yield(:page_layout) : "mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8" %>">
+      <% if controller_name == "sessions" %>
         <%= yield %>
-      </div>
+      <% else %>
+        <div class="<%= content_for?(:page_layout) ? yield(:page_layout) : "mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8" %>">
+          <%= yield %>
+        </div>
+      <% end %>
     </main>
 
     <% unless controller_name == "sessions" %>

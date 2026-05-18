@@ -47,8 +47,22 @@ class EstoqueController < ApplicationController
   end
 
   def destroy
+    session[:deleted_produto] = @produto.attributes.slice("nome", "categoria", "quantidade", "preco", "valor_minimo", "descricao")
     @produto.destroy
+    set_undo_flash(undo_destroy_estoque_index_path)
     redirect_to estoque_index_path, notice: "Produto removido com sucesso!"
+  end
+
+  def undo_destroy
+    data = restore_or_redirect(session_key: :deleted_produto, redirect_path: estoque_index_path)
+    return unless data
+
+    produto = Produto.new(data)
+    if produto.save
+      redirect_undo_success(estoque_index_path)
+    else
+      redirect_undo_failure(estoque_index_path)
+    end
   end
 
   private

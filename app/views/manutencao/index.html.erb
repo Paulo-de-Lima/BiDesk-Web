@@ -27,17 +27,19 @@
 </div>
 
 <%= render layout: "shared/page_toolbar" do %>
-  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between" data-filter-toolbar>
-    <%= form_with url: manutencao_index_path, method: :get, local: true, class: "flex min-w-0 flex-1 flex-wrap items-center gap-3", data: { filter_form: true } do |f| %>
-      <%= f.select :status, options_for_select([["Todos os status", ""], ["Pendente", "pendente"], ["Em Andamento", "em_andamento"], ["Concluída", "concluida"], ["Cancelada", "cancelada"]], params[:status]), {}, { class: ui_select_class, onchange: "this.form.requestSubmit()" } %>
-      <%= f.select :equipamento, options_for_select([["Todos os equipamentos", ""]] + @equipamentos.map { |e| [e, e] }, params[:equipamento]), {}, { class: ui_select_class, onchange: "this.form.requestSubmit()" } %>
+  <div class="<%= ui_toolbar_layout_class %>" data-filter-toolbar>
+    <%= form_with url: manutencao_index_path, method: :get, local: true, class: ui_toolbar_form_class, data: { filter_form: true } do |f| %>
+      <%= f.select :status, options_for_select([["Todos os status", ""], ["Pendente", "pendente"], ["Em Andamento", "em_andamento"], ["Concluída", "concluida"], ["Cancelada", "cancelada"]], params[:status]), {}, { class: ui_filter_select_class, onchange: "this.form.requestSubmit()" } %>
+      <%= f.select :equipamento, options_for_select([["Todos os equipamentos", ""]] + @equipamentos.map { |e| [e, e] }, params[:equipamento]), {}, { class: ui_filter_select_class, onchange: "this.form.requestSubmit()" } %>
       <%= ui_filter_submit %>
       <%= ui_filter_clear(manutencao_index_path) if manutencao_filtros_ativos? %>
     <% end %>
-    <%= ui_modal_link new_manutencao_path, class: ui_btn_primary_class do %>
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-      Nova Manutenção
-    <% end %>
+    <div class="<%= ui_toolbar_actions_class %>">
+      <%= ui_modal_link new_manutencao_path, class: "#{ui_btn_primary_class} w-full justify-center sm:w-auto" do %>
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+        Nova Manutenção
+      <% end %>
+    </div>
   </div>
 <% end %>
 
@@ -46,12 +48,12 @@
     <table class="min-w-full">
       <thead>
         <tr class="border-b border-gray-200">
-          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Equipamento</th>
-          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Descrição</th>
-          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Data</th>
-          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Status</th>
-          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Custo</th>
-          <th scope="col" class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-400">Ações</th>
+          <th scope="col" class="<%= ui_table_th_class %>">Equipamento</th>
+          <th scope="col" class="<%= ui_table_th_class %>">Descrição</th>
+          <th scope="col" class="<%= ui_table_th_class %>">Data</th>
+          <th scope="col" class="<%= ui_table_th_class %>">Status</th>
+          <th scope="col" class="<%= ui_table_th_class %>">Custo</th>
+          <th scope="col" class="<%= ui_table_th_class(align: :right) %>">Ações</th>
         </tr>
       </thead>
       <tbody id="manutencao_tbody" class="divide-y divide-gray-100">

@@ -54,21 +54,20 @@ class ManutencaoController < ApplicationController
   def destroy
     session[:deleted_manutencao] = @manutencao.attributes.slice("equipamento", "descricao", "data", "custo", "status", "observacoes")
     @manutencao.destroy
-    flash[:undo_manutencao] = true
+    set_undo_flash(undo_destroy_manutencao_index_path)
     redirect_to manutencao_index_path, notice: "Manutenção removida com sucesso!"
   end
 
   def undo_destroy
-    deleted_data = session.delete(:deleted_manutencao)
-    unless deleted_data
-      return redirect_to manutencao_index_path, alert: "Não há manutenção para desfazer."
-    end
+    data = restore_or_redirect(session_key: :deleted_manutencao, redirect_path: manutencao_index_path,
+                              failure_alert: "Não há manutenção para desfazer.")
+    return unless data
 
-    manutencao = Manutencao.new(deleted_data)
+    manutencao = Manutencao.new(data)
     if manutencao.save
-      redirect_to manutencao_index_path, notice: "Exclusão desfeita com sucesso!"
+      redirect_undo_success(manutencao_index_path)
     else
-      redirect_to manutencao_index_path, alert: "Não foi possível desfazer a exclusão."
+      redirect_undo_failure(manutencao_index_path)
     end
   end
 

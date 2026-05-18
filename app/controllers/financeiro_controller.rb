@@ -58,8 +58,22 @@ class FinanceiroController < ApplicationController
   end
 
   def destroy
+    session[:deleted_transacao] = @transacao.attributes.slice("tipo", "descricao", "valor", "data", "categoria")
     @transacao.destroy
+    set_undo_flash(undo_destroy_financeiro_index_path)
     redirect_to financeiro_index_path, notice: "Transação removida com sucesso!"
+  end
+
+  def undo_destroy
+    data = restore_or_redirect(session_key: :deleted_transacao, redirect_path: financeiro_index_path)
+    return unless data
+
+    transacao = TransacaoFinanceira.new(data)
+    if transacao.save
+      redirect_undo_success(financeiro_index_path)
+    else
+      redirect_undo_failure(financeiro_index_path)
+    end
   end
 
   private

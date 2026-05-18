@@ -13,13 +13,28 @@ Rails.application.routes.draw do
 
   # Recursos
   resources :clientes do
-    resources :mesas, controller: "mesas_de_bilhar", except: [ :index, :show ]
+    collection do
+      post :undo_destroy
+    end
+    resources :mesas, controller: "mesas_de_bilhar", except: [ :index, :show ] do
+      collection do
+        post :undo_destroy
+      end
+    end
   end
   resources :manutencao, path: "manutencao" do
     collection do
       post :undo_destroy
     end
   end
-  resources :estoque, path: "estoque"
-  resources :financeiro, path: "financeiro"
+  resources :estoque, path: "estoque" do
+    collection do
+      post :undo_destroy
+    end
+  end
+  resources :financeiro, path: "financeiro" do
+    collection do
+      post :undo_destroy
+    end
+  end
 end

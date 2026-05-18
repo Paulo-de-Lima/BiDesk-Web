@@ -39,8 +39,29 @@ class MesasDeBilharController < ApplicationController
   end
 
   def destroy
+    session[:deleted_mesa] = {
+      "cliente_id" => @cliente.id,
+      "mesa" => @mesa.attributes.slice("ordem", "numeracao", "registros")
+    }
     @mesa.destroy
+    set_undo_flash(undo_destroy_cliente_mesas_path(@cliente))
     redirect_to @cliente, notice: "Mesa removida."
+  end
+
+  def undo_destroy
+    payload = restore_or_redirect(session_key: :deleted_mesa, redirect_path: clientes_path)
+    return unless payload
+
+    cliente = Cliente.find_by(id: payload["cliente_id"])
+    unless cliente
+      return redirect_undo_failure(clientes_path, "Cliente não encontrado para restaurar a mesa.")
+    end
+
+    if cliente.mesas_de_bilhar.create(payload["mesa"])
+      redirect_undo_success(cliente_path(cliente))
+    else
+      redirect_undo_failure(cliente_path(cliente))
+    end
   end
 
   private

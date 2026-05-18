@@ -1,6 +1,6 @@
 <%# locals: (produto:) %>
 <% if produto.estoque_baixo? %>
-  <span class="mb-4 inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-800">Estoque baixo</span>
+  <div class="mb-4"><%= ui_status_badge("Estoque crítico", variant: :critical) %></div>
 <% end %>
 <dl class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
   <div>

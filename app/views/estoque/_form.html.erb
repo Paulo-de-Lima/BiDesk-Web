@@ -12,17 +12,17 @@
     </div>
     <div>
       <%= f.label :quantidade, "Quantidade *", class: ui_label_class %>
-      <%= f.number_field :quantidade, class: ui_input_class, min: 0, required: true %>
+      <%= f.text_field :quantidade, class: ui_input_class, required: true, **ui_digits_field_options(max: 6) %>
     </div>
   </div>
   <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
     <div>
       <%= f.label :preco, "Preço *", class: ui_label_class %>
-      <%= f.number_field :preco, step: 0.01, class: ui_input_class, min: 0, required: true %>
+      <%= f.text_field :preco, class: ui_input_class, required: true, **ui_decimal_field_options %>
     </div>
     <div>
       <%= f.label :valor_minimo, "Estoque Mínimo *", class: ui_label_class %>
-      <%= f.number_field :valor_minimo, class: ui_field_class(produto, :valor_minimo), min: 0, required: true, data: { field_error: produto.errors.include?(:valor_minimo) } %>
+      <%= f.text_field :valor_minimo, class: ui_field_class(produto, :valor_minimo), required: true, **ui_digits_field_options(max: 6, extra_data: { field_error: produto.errors.include?(:valor_minimo) }) %>
       <%= render "shared/field_hint", id: "produto-valor-minimo-hint", text: "Quantidade mínima antes de alertar estoque baixo na listagem." %>
     </div>
   </div>

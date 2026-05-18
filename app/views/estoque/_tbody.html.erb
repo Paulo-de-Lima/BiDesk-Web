@@ -1,7 +1,7 @@
 <%# locals: (produtos:) %>
 <% if produtos.any? %>
   <% produtos.each do |produto| %>
-    <tr class="<%= produto.estoque_baixo? ? "bg-red-50/50" : "" %>">
+    <tr class="<%= produto.estoque_baixo? ? "bg-red-50 ring-1 ring-inset ring-red-200" : "" %>">
       <td class="px-6 py-4">
         <span class="text-sm font-semibold text-gray-800"><%= produto.nome %></span>
         <% if produto.descricao.present? %>
@@ -18,9 +18,9 @@
       <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"><%= format_currency(produto.preco) %></td>
       <td class="whitespace-nowrap px-6 py-4">
         <% if produto.estoque_baixo? %>
-          <span class="rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800">Estoque baixo</span>
+          <%= ui_status_badge("Estoque crítico", variant: :critical) %>
         <% else %>
-          <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-800">Normal</span>
+          <%= ui_status_badge("Normal", variant: :success) %>
         <% end %>
       </td>
       <td class="whitespace-nowrap px-6 py-4 text-right">

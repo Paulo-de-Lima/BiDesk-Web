@@ -1,4 +1,5 @@
 import "@hotwired/turbo-rails"
+import { bindInputMasksIn, initInputMasks } from "input_masks"
 
 const toggleDashboardLoading = (isLoading) => {
   const dashboardRoot = document.querySelector("[data-dashboard-root]")
@@ -40,6 +41,7 @@ document.addEventListener("turbo:before-fetch-request", (event) => {
 
 document.addEventListener("turbo:load", () => {
   toggleDashboardLoading(false)
+  initInputMasks()
 })
 
 const closeModal = (modalId) => {
@@ -69,6 +71,21 @@ const closeFormModal = () => {
 }
 
 document.addEventListener("click", (event) => {
+  const passwordToggle = event.target.closest("[data-action='toggle-password']")
+  if (passwordToggle) {
+    const field = passwordToggle.closest(".login-field")
+    const input = field?.querySelector(".login-input--password")
+    if (!input) return
+    const showIcon = passwordToggle.querySelector(".login-icon-show")
+    const hideIcon = passwordToggle.querySelector(".login-icon-hide")
+    const isHidden = input.type === "password"
+    input.type = isHidden ? "text" : "password"
+    showIcon?.classList.toggle("hidden", isHidden)
+    hideIcon?.classList.toggle("hidden", !isHidden)
+    passwordToggle.setAttribute("aria-label", isHidden ? "Ocultar senha" : "Mostrar senha")
+    return
+  }
+
   const openTrigger = event.target.closest("[data-open-modal]")
   if (openTrigger) {
     openModal(openTrigger.dataset.openModal)
@@ -86,6 +103,8 @@ document.addEventListener("click", (event) => {
 })
 
 document.addEventListener("turbo:frame-load", (event) => {
+  bindInputMasksIn(event.target)
+
   if (event.target.id === "resource_modal" && event.target.querySelector("[data-form-modal]")) {
     openFormModal()
   }
@@ -273,4 +292,6 @@ document.addEventListener("turbo:load", () => {
 
   const formErrors = document.getElementById("form-errors")
   if (formErrors) formErrors.focus()
+
+  initInputMasks()
 })

@@ -1,49 +1,77 @@
 <% content_for :title, "Entrar | BiDesk" %>
-<% content_for :body_class, "bg-emerald-50" %>
+<% content_for :body_class, "login-page-body" %>
 
-<div class="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6">
-  <div class="w-full max-w-md space-y-8">
-    <div class="text-center">
-      <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-800 shadow-sm">
-        <svg class="h-9 w-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-      </div>
-      <h1 class="mt-6 text-3xl font-bold tracking-tight text-emerald-900">BiDesk</h1>
-      <p class="mt-2 text-sm text-emerald-700/80">Sistema de gestão para sua empresa de bilhar</p>
-    </div>
+<div class="login-page flex min-h-screen flex-col lg:flex-row">
+  <section class="login-panel-form relative flex w-full flex-col items-center justify-center overflow-hidden px-4 py-12 sm:px-8 lg:order-1 lg:px-12">
+    <div class="login-panel-form__glow pointer-events-none absolute -left-24 top-1/4 h-64 w-64 rounded-full bg-emerald-300/30 blur-3xl" aria-hidden="true"></div>
+    <div class="login-panel-form__glow pointer-events-none absolute -right-16 bottom-1/4 h-48 w-48 rounded-full bg-teal-200/40 blur-3xl" aria-hidden="true"></div>
 
-    <% if alert %>
-      <div class="rounded-xl border border-red-200 bg-red-50 p-4" role="alert">
-        <p class="text-sm font-semibold text-red-800"><%= alert %></p>
-        <p class="mt-1 text-sm text-red-700">Verifique a senha e tente novamente. Se o problema persistir, contate o administrador.</p>
-      </div>
-    <% end %>
-
-    <div class="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-      <%= form_with url: login_path, local: true, class: "space-y-6" do |f| %>
-        <div>
-          <%= f.label :email, "E-mail", class: ui_label_class %>
-          <%= f.email_field :email,
-              value: params[:email],
-              class: ui_input_class,
-              placeholder: "admin@bidesk.local",
-              required: true,
-              autofocus: true,
-              autocomplete: "username" %>
+    <div class="relative z-10 w-full max-w-md">
+      <% if alert %>
+        <div class="login-alert mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-sm" role="alert">
+          <%= alert %>
         </div>
-        <div>
-          <%= f.label :password, "Senha", class: ui_label_class %>
-          <%= f.password_field :password,
-              class: ui_input_class,
-              placeholder: "Digite sua senha",
-              required: true,
-              autocomplete: "current-password" %>
-        </div>
-        <%= f.submit "Entrar", class: "w-full rounded-xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2" %>
       <% end %>
-    </div>
 
-    <p class="text-center text-sm text-emerald-700/70">Acesso restrito ao administrador</p>
-  </div>
+      <div class="login-card">
+        <div class="login-card__badge" aria-hidden="true">
+          <svg class="login-card__badge-icon text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+        </div>
+
+        <h1 class="login-card__title">FAÇA LOGIN</h1>
+        <p class="login-card__subtitle">Acesse o painel de gestão do BiDesk</p>
+
+        <%= form_with url: login_path, class: "login-form space-y-5" do |f| %>
+          <div>
+            <label for="email" class="login-label">E-mail</label>
+            <div class="login-field">
+              <span class="login-field__icon" aria-hidden="true">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+              </span>
+              <%= f.email_field :email, id: "email", required: true, autocomplete: "email", placeholder: "seu@email.com", class: "login-input" %>
+            </div>
+          </div>
+
+          <div>
+            <label for="password" class="login-label">Senha</label>
+            <div class="login-field">
+              <span class="login-field__icon" aria-hidden="true">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+              </span>
+              <%= f.password_field :password, id: "password", required: true, autocomplete: "current-password", placeholder: "••••••••", class: "login-input login-input--password", data: { toggle_password_target: "input" } %>
+              <button type="button" class="login-field__toggle" data-action="toggle-password" aria-label="Mostrar senha">
+                <svg class="h-5 w-5 login-icon-show" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <svg class="h-5 w-5 login-icon-hide hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639a9.97 9.97 0 01-1.563 3.029m-14.09 0a9.97 9.97 0 011.563-3.029M9.88 9.88l4.242 4.242M9.88 9.88L3 3m6.88 6.88L21 21" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <%= f.submit "ENTRAR", class: "login-submit" %>
+        <% end %>
+      </div>
+
+      <p class="login-footer-note">Acesso restrito ao administrador e funcionários</p>
+    </div>
+  </section>
+
+  <section class="login-panel-brand relative flex w-full flex-col items-center justify-center px-8 py-16 lg:order-2">
+    <div class="login-panel-brand__pattern pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="login-panel-brand__glow pointer-events-none absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/20 blur-3xl" aria-hidden="true"></div>
+    <div class="relative z-10 flex flex-col items-center text-center">
+      <%= image_tag "/images/bidesk-logo.png", alt: "BiDesk", class: "login-brand-logo mb-6 w-auto drop-shadow-2xl" %>
+      <h2 class="login-brand-title">BiDesk<span class="login-brand-title__accent">Web</span></h2>
+      <p class="login-brand-tagline mt-3 max-w-xs text-sm text-emerald-100/90">Gestão inteligente para Locadora Bilhar Paulo Afonso</p>
+    </div>
+  </section>
 </div>

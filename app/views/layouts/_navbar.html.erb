@@ -1,27 +1,18 @@
 <nav class="fixed top-0 z-50 w-full bg-emerald-800 text-white shadow-md">
-  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-    <div class="flex min-w-0 flex-1 items-center gap-4 md:gap-8">
-      <%= link_to root_path, class: "flex shrink-0 items-center gap-2 transition hover:opacity-90" do %>
-        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/15">
-          <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </span>
-        <span class="text-xl font-bold tracking-tight">BiDesk</span>
-      <% end %>
+  <div class="flex h-16 w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 xl:px-10">
+    <%= link_to root_path, class: "flex shrink-0 items-center gap-3 transition hover:opacity-90" do %>
+      <%= image_tag "/images/bidesk-mark.png", alt: "", class: "h-9 w-9 object-contain drop-shadow-sm", aria: { hidden: true } %>
+      <span class="text-xl font-bold tracking-tight">BiDesk</span>
+    <% end %>
 
-      <div class="hidden items-center gap-1 md:flex">
-        <% [
-          ["Dashboard", root_path, "dashboard"],
-          ["Clientes", clientes_path, "clientes"],
-          ["Estoque", estoque_index_path, "estoque"],
-          ["Financeiro", financeiro_index_path, "financeiro"],
-          ["Manutenção", manutencao_index_path, "manutencao"]
-        ].each do |label, path, name| %>
-          <%= link_to label, path,
-              class: "rounded-lg px-4 py-2 text-sm font-medium transition #{controller_name == name ? "bg-emerald-600 text-white" : "text-white/90 hover:bg-white/10"}" %>
+    <div class="hidden flex-1 items-center justify-center gap-1 md:flex">
+      <% ui_nav_items.each do |label, path, name, icon| %>
+        <% active = controller_name == name %>
+        <%= link_to path, class: "#{ui_nav_link_class(active: active)} px-3 py-2 text-sm lg:px-4" do %>
+          <%= ui_icon_svg(icon, css_class: "h-4 w-4 shrink-0 opacity-90") %>
+          <span><%= label %></span>
         <% end %>
-      </div>
+      <% end %>
     </div>
 
     <div class="flex shrink-0 items-center gap-2">
@@ -40,28 +31,34 @@
 
       <%= link_to logout_path,
           data: { turbo_method: :delete },
-          class: "hidden md:inline-flex shrink-0 items-center rounded-lg border border-white px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-800",
+          class: "hidden md:inline-flex shrink-0 items-center gap-2 rounded-lg border border-white px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-800",
           aria: { label: "Sair da conta" } do %>
-        Sair
+        <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"></path>
+        </svg>
+        <span>Sair</span>
       <% end %>
     </div>
   </div>
 
   <div id="mobile-nav-menu" class="hidden border-t border-emerald-700 bg-emerald-800 md:hidden" data-mobile-nav data-open="false">
-    <div class="mx-auto max-w-7xl space-y-1 px-4 py-3 sm:px-6">
-      <% [
-        ["Dashboard", root_path, "dashboard"],
-        ["Clientes", clientes_path, "clientes"],
-        ["Estoque", estoque_index_path, "estoque"],
-        ["Financeiro", financeiro_index_path, "financeiro"],
-        ["Manutenção", manutencao_index_path, "manutencao"]
-      ].each do |label, path, name| %>
-        <%= link_to label, path,
-            class: "block rounded-lg px-4 py-3 text-sm font-medium transition #{controller_name == name ? "bg-emerald-600 text-white" : "text-white/90 hover:bg-white/10"}" %>
+    <div class="space-y-1 px-4 py-3 sm:px-6 lg:px-8 xl:px-10">
+      <% ui_nav_items.each do |label, path, name, icon| %>
+        <% active = controller_name == name %>
+        <%= link_to path, class: "#{ui_nav_link_class(active: active)} w-full px-4 py-3 text-sm" do %>
+          <%= ui_icon_svg(icon, css_class: "h-5 w-5 shrink-0 opacity-90") %>
+          <span><%= label %></span>
+        <% end %>
       <% end %>
-      <%= link_to "Sair", logout_path,
+
+      <%= link_to logout_path,
           data: { turbo_method: :delete },
-          class: "mt-2 block rounded-lg border border-white/30 px-4 py-3 text-center text-sm font-medium text-white hover:bg-white/10" %>
+          class: "mt-2 flex items-center justify-center gap-2 rounded-lg border border-white/30 px-4 py-3 text-sm font-medium text-white hover:bg-white/10" do %>
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"></path>
+        </svg>
+        Sair
+      <% end %>
     </div>
   </div>
 </nav>

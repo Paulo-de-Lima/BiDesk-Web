@@ -1,15 +1,12 @@
 <%# locals: (manutencoes:) %>
 <% if manutencoes.any? %>
-  <% status_colors = { "pendente" => "bg-amber-100 text-amber-800", "em_andamento" => "bg-blue-100 text-blue-800", "concluida" => "bg-emerald-100 text-emerald-800", "cancelada" => "bg-red-100 text-red-800" } %>
   <% manutencoes.each do |manutencao| %>
-    <tr>
+    <tr class="<%= "bg-amber-50/60 ring-1 ring-inset ring-amber-200" if manutencao.status == "pendente" %> <%= "bg-red-50/60 ring-1 ring-inset ring-red-200" if manutencao.status == "cancelada" %>">
       <td class="whitespace-nowrap px-6 py-4 text-sm font-semibold text-gray-800"><%= manutencao.equipamento %></td>
       <td class="px-6 py-4 text-sm text-gray-600"><%= truncate(manutencao.descricao, length: 50) %></td>
       <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600"><%= format_date(manutencao.data) %></td>
       <td class="whitespace-nowrap px-6 py-4">
-        <span class="rounded-full px-2.5 py-1 text-xs font-medium <%= status_colors[manutencao.status] || "bg-gray-100 text-gray-800" %>">
-          <%= manutencao.status.humanize %>
-        </span>
+        <%= ui_status_badge(manutencao.status.humanize, variant: ui_manutencao_status_variant(manutencao.status)) %>
       </td>
       <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"><%= manutencao.custo ? format_currency(manutencao.custo) : "—" %></td>
       <td class="whitespace-nowrap px-6 py-4 text-right">

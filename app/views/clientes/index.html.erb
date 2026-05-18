@@ -21,9 +21,9 @@
 </div>
 
 <%= render layout: "shared/page_toolbar" do %>
-  <div class="flex flex-col gap-4 lg:flex-row lg:items-center" data-filter-toolbar>
-    <%= form_with url: clientes_path, method: :get, local: true, html: { class: "flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-center", data: { filter_form: true } } do |f| %>
-      <div class="relative min-w-0 flex-1">
+  <div class="<%= ui_toolbar_layout_class %>" data-filter-toolbar>
+    <%= form_with url: clientes_path, method: :get, local: true, html: { class: ui_toolbar_form_class, data: { filter_form: true } } do |f| %>
+      <div class="<%= ui_toolbar_search_wrapper_class %>">
         <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400" aria-hidden="true">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -76,9 +76,9 @@
       </details>
     <% end %>
 
-    <div class="flex shrink-0 flex-wrap items-center gap-3">
+    <div class="<%= ui_toolbar_actions_class %>">
       <%= link_to clientes_path(clientes_export_params.merge(format: :csv)),
-          class: "inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-emerald-800 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600",
+          class: "inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-emerald-800 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 sm:w-auto",
           title: "Baixar lista em CSV" do %>
         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -86,8 +86,7 @@
         Exportar
       <% end %>
 
-      <%= ui_modal_link new_cliente_path,
-          class: "inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2" do %>
+      <%= ui_modal_link new_cliente_path, class: "#{ui_btn_primary_class} w-full sm:w-auto justify-center" do %>
         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
         </svg>
@@ -102,10 +101,10 @@
     <table class="min-w-full">
       <thead>
         <tr class="border-b border-gray-200">
-          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Nome</th>
-          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Telefone</th>
-          <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Email</th>
-          <th scope="col" class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-400">Ações</th>
+          <th scope="col" class="<%= ui_table_th_class %>">Nome</th>
+          <th scope="col" class="<%= ui_table_th_class %>">Telefone</th>
+          <th scope="col" class="<%= ui_table_th_class %>">Email</th>
+          <th scope="col" class="<%= ui_table_th_class(align: :right) %>">Ações</th>
         </tr>
       </thead>
       <tbody id="clientes_tbody" class="divide-y divide-gray-100">

@@ -12,7 +12,7 @@
   <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
       <div>
       <%= f.label :valor, "Valor *", class: ui_label_class %>
-      <%= f.number_field :valor, step: 0.01, class: ui_input_class, min: 0.01, required: true %>
+      <%= f.text_field :valor, class: ui_input_class, required: true, **ui_decimal_field_options %>
     </div>
     <div>
       <%= f.label :data, "Data *", class: ui_label_class %>

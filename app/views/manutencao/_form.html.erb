@@ -21,7 +21,7 @@
   </div>
   <div>
     <%= f.label :custo, "Custo", class: ui_label_class %>
-    <%= f.number_field :custo, step: 0.01, class: ui_input_class, min: 0 %>
+    <%= f.text_field :custo, class: ui_input_class, **ui_decimal_field_options %>
   </div>
   <div>
     <%= f.label :observacoes, "Observações", class: ui_label_class %>

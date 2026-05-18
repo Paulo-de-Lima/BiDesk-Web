@@ -7,7 +7,12 @@ class MesaDeBilhar < ApplicationRecord
   validates :ordem, presence: true,
                     numericality: { only_integer: true, greater_than: 0 }
   validates :registros, presence: true,
-                        numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+                        numericality: {
+                          only_integer: true,
+                          greater_than_or_equal_to: 10_000,
+                          less_than_or_equal_to: 999_999,
+                          message: "deve ter entre 5 e 6 dígitos"
+                        }
   validates :ordem, uniqueness: { scope: :cliente_id }
 
   before_validation :assign_ordem, on: :create
