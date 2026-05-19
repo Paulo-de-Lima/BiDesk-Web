@@ -15,6 +15,9 @@ class ClientesController < ApplicationController
   end
 
   def show
+    return if modal_frame_request?
+
+    redirect_to clientes_path
   end
 
   def new
@@ -25,7 +28,7 @@ class ClientesController < ApplicationController
     @cliente = Cliente.new(cliente_params)
     if respond_with_modal_save(
       success: @cliente.save,
-      redirect_path: @cliente,
+      redirect_path: clientes_path,
       notice: "Cliente criado com sucesso!",
       tbody_id: "clientes_tbody",
       partial: "clientes/tbody",
@@ -43,7 +46,7 @@ class ClientesController < ApplicationController
   def update
     if respond_with_modal_save(
       success: @cliente.update(cliente_params),
-      redirect_path: @cliente,
+      redirect_path: clientes_path,
       notice: "Cliente atualizado com sucesso!",
       tbody_id: "clientes_tbody",
       partial: "clientes/tbody",

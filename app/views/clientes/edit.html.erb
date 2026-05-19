@@ -6,7 +6,7 @@
   <% content_for :title, "Editar #{@cliente.nome} | BiDesk" %>
   <% ui_page_shell %>
   <% ui_page_header(
-    breadcrumbs: [{ label: "Dashboard", path: root_path }, { label: "Clientes", path: clientes_path }, { label: @cliente.nome, path: cliente_path(@cliente) }, { label: "Editar" }],
+    breadcrumbs: [{ label: "Dashboard", path: root_path }, { label: "Clientes", path: clientes_path }, { label: @cliente.nome }, { label: "Editar" }],
     title: "Editar Cliente",
     subtitle: @cliente.nome,
     icon: :clientes
