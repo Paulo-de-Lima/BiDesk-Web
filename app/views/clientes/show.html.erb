@@ -1,34 +1,6 @@
-<% if modal_frame_request? %>
-  <%= render "shared/modal_response", icon: :show, title: @cliente.nome, subtitle: "Detalhes do cliente" do %>
-    <%= render "show_details", cliente: @cliente %>
-    <%= render "shared/modal_show_footer", edit_path: edit_cliente_path(@cliente) %>
-  <% end %>
-<% else %>
-  <% content_for :title, "#{@cliente.nome} | BiDesk" %>
-  <% ui_page_shell %>
-  <% ui_page_header(
-    breadcrumbs: [{ label: "Dashboard", path: root_path }, { label: "Clientes", path: clientes_path }, { label: @cliente.nome }],
-    title: @cliente.nome,
-    subtitle: "Detalhes do cliente e mesas de bilhar cadastradas",
-    icon: :clientes
-  ) %>
-
-  <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <%= ui_badge_count("#{pluralize(@cliente.mesas_de_bilhar.size, 'mesa', 'mesas')} cadastrada#{'s' if @cliente.mesas_de_bilhar.size != 1}") %>
-    <%= render "shared/show_actions",
-        primary: [{ label: "Nova mesa", path: new_cliente_mesa_path(@cliente), icon: :plus, modal: true }],
-        secondary: [{ label: "Editar cliente", path: edit_cliente_path(@cliente), modal: true }],
-        back_path: clientes_path %>
-  </div>
-
-  <div class="mb-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
-    <%= render "show_details", cliente: @cliente %>
-  </div>
-
-  <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-    <div class="border-b border-gray-100 px-6 py-4">
-      <h2 class="text-lg font-bold text-gray-900">Mesas de bilhar</h2>
-    </div>
-    <%= render "mesas_panel", cliente: @cliente %>
-  </div>
+<%# Esta tela só responde dentro do turbo-frame do modal.
+    Acesso direto a /clientes/:id redireciona para a lista no controller. %>
+<%= render "shared/modal_response", icon: :show, title: @cliente.nome, subtitle: "Detalhes do cliente" do %>
+  <%= render "show_details", cliente: @cliente %>
+  <%= render "shared/modal_show_footer", edit_path: edit_cliente_path(@cliente) %>
 <% end %>

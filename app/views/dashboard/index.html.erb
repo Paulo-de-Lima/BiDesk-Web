@@ -12,89 +12,234 @@
     <%= ui_badge_count("Resumo em tempo real") %>
   </div>
 
-  <div class="mb-8 grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:grid-cols-4">
-    <% [
-      { label: "Total de Clientes", value: @total_clientes, border: "border-emerald-500", icon_bg: "bg-emerald-100", icon_color: "text-emerald-600", icon: ui_icon_path(:clientes) },
-      { label: "Resultado do Mês", value: format_currency(@saldo_mes), border: @saldo_mes >= 0 ? "border-emerald-500" : "border-red-500", icon_bg: @saldo_mes >= 0 ? "bg-emerald-100" : "bg-red-100", icon_color: @saldo_mes >= 0 ? "text-emerald-600" : "text-red-600", icon: ui_icon_path(:financeiro), value_class: @saldo_mes >= 0 ? "text-emerald-600" : "text-red-600" },
-      { label: "Itens em Estoque", value: @total_produtos, border: "border-amber-400", icon_bg: "bg-amber-100", icon_color: "text-amber-600", icon: ui_icon_path(:estoque), extra: @produtos_baixo_estoque > 0 ? "#{@produtos_baixo_estoque} com estoque baixo" : nil },
-      { label: "Manutenções Pendentes", value: @manutencoes_pendentes, border: "border-red-400", icon_bg: "bg-red-100", icon_color: "text-red-600", icon: ui_icon_path(:manutencao) }
-    ].each do |card| %>
-      <div class="relative min-h-[132px] self-start overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm border-l-4 <%= card[:border] %>">
+  <%
+    cards = [
+      {
+        label: "Total de Clientes",
+        value: @total_clientes,
+        accent: :emerald,
+        icon: ui_icon_path(:clientes),
+        hint: "Clientes ativos cadastrados"
+      },
+      {
+        label: "Resultado do Mês",
+        currency: @saldo_mes,
+        accent: @saldo_mes >= 0 ? :emerald : :red,
+        icon: ui_icon_path(:financeiro),
+        variation: @variacao_saldo,
+        hint: @saldo_mes >= 0 ? "Saldo positivo neste mês" : "Atenção: prejuízo no mês"
+      },
+      {
+        label: "Itens em Estoque",
+        value: @total_produtos,
+        accent: :amber,
+        icon: ui_icon_path(:estoque),
+        extra: @produtos_baixo_estoque > 0 ? "#{@produtos_baixo_estoque} com estoque baixo" : "Estoque saudável",
+        extra_color: @produtos_baixo_estoque > 0 ? "text-red-600" : "text-emerald-600"
+      },
+      {
+        label: "Manutenções Pendentes",
+        value: @manutencoes_pendentes,
+        accent: @manutencoes_pendentes > 0 ? :red : :emerald,
+        icon: ui_icon_path(:manutencao),
+        hint: @manutencoes_pendentes > 0 ? "Itens aguardando atendimento" : "Sem pendências"
+      }
+    ]
+
+    accent_styles = {
+      emerald: {
+        border: "border-l-emerald-500",
+        gradient: "from-emerald-50 via-white to-white",
+        icon_bg: "bg-emerald-100",
+        icon_color: "text-emerald-600",
+        value_color: "text-emerald-700",
+        ring: "ring-emerald-100"
+      },
+      red: {
+        border: "border-l-red-500",
+        gradient: "from-red-50 via-white to-white",
+        icon_bg: "bg-red-100",
+        icon_color: "text-red-600",
+        value_color: "text-red-600",
+        ring: "ring-red-100"
+      },
+      amber: {
+        border: "border-l-amber-500",
+        gradient: "from-amber-50 via-white to-white",
+        icon_bg: "bg-amber-100",
+        icon_color: "text-amber-600",
+        value_color: "text-gray-900",
+        ring: "ring-amber-100"
+      }
+    }
+  %>
+
+  <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <% cards.each do |card| %>
+      <% style = accent_styles[card[:accent]] %>
+      <% is_currency = card.key?(:currency) %>
+      <% value_color = style[:value_color] %>
+      <div class="metric-card relative flex min-h-[148px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br <%= style[:gradient] %> p-5 shadow-sm ring-1 ring-inset <%= style[:ring] %> border-l-4 <%= style[:border] %> transition hover:-translate-y-0.5 hover:shadow-md">
         <div class="dashboard-card-skeleton absolute inset-0 hidden animate-pulse rounded-2xl bg-white p-6">
           <div class="mb-3 h-4 w-1/2 rounded bg-gray-200"></div>
           <div class="h-10 w-2/3 rounded bg-gray-200"></div>
         </div>
-        <div class="dashboard-card-content flex items-start justify-between gap-3">
-          <div class="min-w-0 flex-1">
-            <p class="text-sm font-medium text-gray-600"><%= card[:label] %></p>
-            <% if card[:label] == "Resultado do Mês" %>
-              <%= ui_metric_currency(@saldo_mes, color_class: card[:value_class] || "text-gray-900") %>
-            <% else %>
-              <p class="<%= ui_metric_value_class(card[:value], color_class: card[:value_class] || "text-gray-900") %>" title="<%= card[:value] %>"><%= card[:value] %></p>
-            <% end %>
-            <% if card[:extra] %>
-              <p class="mt-1 text-sm text-red-600"><%= card[:extra] %></p>
-            <% end %>
-            <% if card[:label] == "Resultado do Mês" && @saldo_mes < 0 %>
-              <span class="mt-2 inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-700">Prejuízo no mês</span>
-            <% end %>
+
+        <div class="dashboard-card-content flex h-full flex-col">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-medium uppercase tracking-wide text-gray-500"><%= card[:label] %></p>
+
+              <% if is_currency %>
+                <%= ui_metric_currency(card[:currency], color_class: value_color) %>
+              <% else %>
+                <p class="<%= ui_metric_value_class(card[:value], color_class: value_color) %>" title="<%= card[:value] %>"><%= card[:value] %></p>
+              <% end %>
+            </div>
+
+            <div class="<%= style[:icon_bg] %> shrink-0 rounded-xl p-2.5 shadow-sm">
+              <svg class="h-7 w-7 <%= style[:icon_color] %>" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= card[:icon] %>"></path>
+              </svg>
+            </div>
           </div>
-          <div class="<%= card[:icon_bg] %> shrink-0 rounded-full p-3">
-            <svg class="h-8 w-8 <%= card[:icon_color] %>" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= card[:icon] %>"></path>
-            </svg>
+
+          <div class="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 pt-2">
+            <% if card[:variation] %>
+              <%= variation_badge(card[:variation]) %>
+              <span class="text-xs text-gray-500">vs mês anterior</span>
+            <% elsif card[:extra] %>
+              <span class="text-xs font-medium <%= card[:extra_color] || 'text-gray-500' %>"><%= card[:extra] %></span>
+            <% elsif card[:hint] %>
+              <span class="text-xs text-gray-500"><%= card[:hint] %></span>
+            <% end %>
           </div>
         </div>
       </div>
     <% end %>
   </div>
 
+  <div class="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm xl:col-span-2">
+      <div class="mb-4 flex flex-wrap items-start justify-between gap-3">
+        <div class="min-w-0">
+          <h2 class="text-lg font-bold text-gray-900">Fluxo financeiro</h2>
+          <p class="text-sm text-gray-500">Receitas, despesas e linha de saldo</p>
+        </div>
+
+        <%= form_with url: root_path, method: :get, local: true,
+              data: { turbo_frame: "_top" },
+              class: "flex flex-wrap items-center gap-2" do |f| %>
+          <label for="fluxo-periodo" class="sr-only">Período</label>
+          <%= f.select :periodo,
+                @fluxo_periodos.map { |k, v| [v[:label], k] },
+                { selected: @fluxo_periodo_key },
+                {
+                  id: "fluxo-periodo",
+                  class: "rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20",
+                  onchange: "this.form.requestSubmit()"
+                } %>
+        <% end %>
+      </div>
+
+      <div class="mb-4 flex flex-wrap items-center gap-3 text-xs text-gray-600">
+        <span class="inline-flex items-center gap-1.5"><span class="inline-block h-2.5 w-2.5 rounded-sm bg-emerald-500"></span>Receitas</span>
+        <span class="inline-flex items-center gap-1.5"><span class="inline-block h-2.5 w-2.5 rounded-sm bg-red-500"></span>Despesas</span>
+        <span class="inline-flex items-center gap-1.5"><span class="inline-block h-0.5 w-4 bg-teal-700"></span>Saldo</span>
+      </div>
+
+      <%= grouped_bar_chart(@fluxo_mensal, height: 260) %>
+    </div>
+
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold text-gray-900">Despesas por categoria</h2>
+        <p class="text-sm text-gray-500">Mês atual</p>
+      </div>
+      <%= donut_chart(@despesas_por_categoria,
+            size: 168,
+            thickness: 22,
+            palette: ChartHelper::DONUT_PALETTE) %>
+    </div>
+  </div>
+
   <div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
     <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h2 class="mb-4 text-xl font-bold text-gray-900">Resumo Financeiro do Mês</h2>
-      <div class="space-y-4">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold text-gray-900">Resumo Financeiro do Mês</h2>
+        <p class="text-sm text-gray-500">Comparativo com o mês anterior</p>
+      </div>
+      <div class="space-y-3">
         <div class="flex min-w-0 items-center justify-between gap-3 rounded-xl bg-emerald-50 p-4">
-          <span class="font-medium text-gray-700">Receitas</span>
-          <span class="min-w-0 shrink text-right text-xl font-bold tabular-nums leading-tight text-emerald-600 break-words" title="<%= format_currency(@receitas_mes) %>"><%= format_currency(@receitas_mes) %></span>
+          <div class="min-w-0">
+            <span class="block text-xs font-medium uppercase tracking-wide text-emerald-700">Receitas</span>
+            <%= variation_badge(@variacao_receitas) %>
+          </div>
+          <span class="min-w-0 shrink text-right text-xl font-bold tabular-nums leading-tight text-emerald-700 break-words" title="<%= format_currency(@receitas_mes) %>"><%= format_currency(@receitas_mes) %></span>
         </div>
         <div class="flex min-w-0 items-center justify-between gap-3 rounded-xl bg-red-50 p-4">
-          <span class="font-medium text-gray-700">Despesas</span>
+          <div class="min-w-0">
+            <span class="block text-xs font-medium uppercase tracking-wide text-red-700">Despesas</span>
+            <%= variation_badge(@variacao_despesas, invert: true) %>
+          </div>
           <span class="min-w-0 shrink text-right text-xl font-bold tabular-nums leading-tight text-red-600 break-words" title="<%= format_currency(@despesas_mes) %>"><%= format_currency(@despesas_mes) %></span>
         </div>
         <div class="flex min-w-0 items-center justify-between gap-3 rounded-xl border-2 border-emerald-200 bg-emerald-50/50 p-4">
-          <span class="font-bold text-gray-900">Saldo</span>
-          <%= ui_metric_currency_span(@saldo_mes, color_class: @saldo_mes >= 0 ? "text-emerald-600" : "text-red-600") %>
+          <div class="min-w-0">
+            <span class="block text-xs font-medium uppercase tracking-wide text-gray-800">Saldo</span>
+            <%= variation_badge(@variacao_saldo) %>
+          </div>
+          <%= ui_metric_currency_span(@saldo_mes, color_class: @saldo_mes >= 0 ? "text-emerald-700" : "text-red-600") %>
         </div>
       </div>
     </div>
 
     <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h2 class="mb-4 text-xl font-bold text-gray-900">Ações Rápidas</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <%= ui_modal_link new_cliente_path, class: "block rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-center transition hover:bg-emerald-100 min-h-[120px]" do %>
-          <svg class="mx-auto mb-2 h-8 w-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-          <p class="text-sm font-medium text-gray-700">Novo Cliente</p>
-        <% end %>
-        <%= ui_modal_link new_estoque_path, class: "block rounded-xl border border-amber-100 bg-amber-50 p-4 text-center transition hover:bg-amber-100 min-h-[120px]" do %>
-          <svg class="mx-auto mb-2 h-8 w-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-          <p class="text-sm font-medium text-gray-700">Novo Produto</p>
-        <% end %>
-        <button type="button" data-open-modal="nova-movimentacao-modal" class="block w-full rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-center transition hover:bg-emerald-100 min-h-[120px]">
-          <svg class="mx-auto mb-2 h-8 w-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-          <p class="text-sm font-medium text-gray-700">Nova Movimentação</p>
-        </button>
-        <%= ui_modal_link new_manutencao_path, class: "block rounded-xl border border-red-100 bg-red-50 p-4 text-center transition hover:bg-red-100 min-h-[120px]" do %>
-          <svg class="mx-auto mb-2 h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-          <p class="text-sm font-medium text-gray-700">Nova Manutenção</p>
-        <% end %>
+      <div class="mb-4">
+        <h2 class="text-lg font-bold text-gray-900">Status das manutenções</h2>
+        <p class="text-sm text-gray-500">Distribuição geral</p>
       </div>
+      <%= donut_chart(@status_manutencoes,
+            size: 168,
+            thickness: 22,
+            palette: %w[#f59e0b #6366f1 #10b981 #94a3b8]) %>
+    </div>
+  </div>
+
+  <div class="mb-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+    <h2 class="mb-4 text-lg font-bold text-gray-900">Ações Rápidas</h2>
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <%= ui_modal_link new_cliente_path, class: "group flex flex-col items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-center transition hover:-translate-y-0.5 hover:bg-emerald-100 hover:shadow-sm" do %>
+        <span class="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 group-hover:bg-white">
+          <%= ui_icon_svg(:clientes, css_class: "h-5 w-5") %>
+        </span>
+        <p class="text-sm font-medium text-gray-700">Novo Cliente</p>
+      <% end %>
+      <%= ui_modal_link new_estoque_path, class: "group flex flex-col items-center justify-center rounded-xl border border-amber-100 bg-amber-50 p-4 text-center transition hover:-translate-y-0.5 hover:bg-amber-100 hover:shadow-sm" do %>
+        <span class="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-700 group-hover:bg-white">
+          <%= ui_icon_svg(:estoque, css_class: "h-5 w-5") %>
+        </span>
+        <p class="text-sm font-medium text-gray-700">Novo Produto</p>
+      <% end %>
+      <button type="button" data-open-modal="nova-movimentacao-modal" class="group flex w-full flex-col items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-center transition hover:-translate-y-0.5 hover:bg-emerald-100 hover:shadow-sm">
+        <span class="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 group-hover:bg-white">
+          <%= ui_icon_svg(:financeiro, css_class: "h-5 w-5") %>
+        </span>
+        <p class="text-sm font-medium text-gray-700">Nova Movimentação</p>
+      </button>
+      <%= ui_modal_link new_manutencao_path, class: "group flex flex-col items-center justify-center rounded-xl border border-red-100 bg-red-50 p-4 text-center transition hover:-translate-y-0.5 hover:bg-red-100 hover:shadow-sm" do %>
+        <span class="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-red-700 group-hover:bg-white">
+          <%= ui_icon_svg(:manutencao, css_class: "h-5 w-5") %>
+        </span>
+        <p class="text-sm font-medium text-gray-700">Nova Manutenção</p>
+      <% end %>
     </div>
   </div>
 
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
     <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm lg:col-span-2">
       <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
-        <h2 class="text-xl font-bold text-gray-900">Últimas Movimentações</h2>
+        <h2 class="text-lg font-bold text-gray-900">Últimas Movimentações</h2>
         <%= link_to "Ver todas →", financeiro_index_path, class: "text-sm font-medium text-emerald-700 hover:text-emerald-900" %>
       </div>
       <div class="overflow-x-auto">
@@ -127,14 +272,14 @@
 
     <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <div class="mb-4 flex items-center justify-between">
-        <h2 class="text-xl font-bold text-gray-900">Últimos Clientes</h2>
+        <h2 class="text-lg font-bold text-gray-900">Últimos Clientes</h2>
         <%= link_to "Ver todos →", clientes_path, class: "text-sm font-medium text-emerald-700 hover:text-emerald-900" %>
       </div>
       <div class="space-y-3">
         <% if @ultimos_clientes.any? %>
           <% @ultimos_clientes.each do |cliente| %>
             <div class="rounded-xl border border-gray-100 bg-gray-50 p-3">
-              <p class="font-medium text-gray-900"><%= link_to cliente.nome, cliente_path(cliente), class: "text-emerald-800 hover:underline" %></p>
+              <p class="font-medium text-gray-900"><%= ui_modal_link cliente.nome, cliente_path(cliente), class: "text-emerald-800 hover:underline" %></p>
               <p class="text-sm text-gray-600"><%= cliente.telefone %></p>
             </div>
           <% end %>

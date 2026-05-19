@@ -45,7 +45,7 @@ class MesasDeBilharController < ApplicationController
     }
     @mesa.destroy
     set_undo_flash(undo_destroy_cliente_mesas_path(@cliente))
-    redirect_to @cliente, notice: "Mesa removida."
+    redirect_to clientes_path, notice: "Mesa removida."
   end
 
   def undo_destroy
@@ -58,9 +58,9 @@ class MesasDeBilharController < ApplicationController
     end
 
     if cliente.mesas_de_bilhar.create(payload["mesa"])
-      redirect_undo_success(cliente_path(cliente))
+      redirect_undo_success(clientes_path)
     else
-      redirect_undo_failure(cliente_path(cliente))
+      redirect_undo_failure(clientes_path)
     end
   end
 
