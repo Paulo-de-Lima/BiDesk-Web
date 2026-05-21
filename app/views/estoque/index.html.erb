@@ -12,27 +12,33 @@
   <%= ui_filters_active_chip if estoque_filtros_ativos? %>
 </div>
 
-<% if @produtos_baixo_estoque.any? %>
-  <div class="mb-6 rounded-xl border-2 border-red-300 bg-red-50 p-4 shadow-sm ring-2 ring-red-100" role="alert">
-    <p class="flex flex-wrap items-center gap-2 text-sm font-semibold text-red-900">
-      <%= ui_status_badge("Atenção", variant: :critical) %>
-      <span><strong><%= @produtos_baixo_estoque.count %></strong> produto(s) com estoque crítico (abaixo do mínimo). Reponha ou ajuste o estoque mínimo.</span>
-    </p>
-  </div>
-<% end %>
+<div id="estoque-alerta-critico">
+  <%= render "alerta_critico", produtos_baixo_estoque: @produtos_baixo_estoque %>
+</div>
 
 <%= render layout: "shared/page_toolbar" do %>
   <div class="<%= ui_toolbar_layout_class %>" data-filter-toolbar>
-    <%= form_with url: estoque_index_path, method: :get, local: true, class: ui_toolbar_form_class, data: { filter_form: true } do |f| %>
+    <%= form_with url: estoque_index_path, method: :get, local: true, html: { class: ui_toolbar_form_class, data: { filter_form: true } } do |f| %>
       <div class="<%= ui_toolbar_search_wrapper_class %>">
         <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400" aria-hidden="true">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </span>
         <%= f.text_field :busca, value: params[:busca], placeholder: "Buscar produtos...", class: ui_search_input_class %>
+        <%= f.submit "Buscar", class: "sr-only" %>
       </div>
-      <%= f.select :categoria, options_for_select([["Todas as categorias", ""]] + @categorias.map { |c| [c, c] }, params[:categoria]), {}, { class: ui_filter_select_class, onchange: "this.form.requestSubmit()" } %>
-      <%= ui_filter_submit %>
-      <%= ui_filter_clear(estoque_index_path) if estoque_filtros_ativos? %>
+
+      <%= render "shared/filter_details",
+          active: params[:categoria].present?,
+          show_clear: estoque_filtros_ativos?,
+          clear_path: estoque_index_path,
+          clear_label: (params[:busca].present? ? "Limpar filtros e busca" : "Limpar filtros") do %>
+        <%= render "shared/filter_field", label: "Categoria" do %>
+          <%= f.select :categoria,
+              options_for_select([["Todas as categorias", ""]] + @categorias.map { |c| [c, c] }, params[:categoria]),
+              {},
+              { class: "#{ui_filter_select_class} w-full", onchange: "this.form.requestSubmit()" } %>
+        <% end %>
+      <% end %>
     <% end %>
     <div class="<%= ui_toolbar_actions_class %>">
       <%= ui_modal_link new_estoque_path, class: "#{ui_btn_primary_class} w-full justify-center sm:w-auto" do %>
@@ -53,7 +59,7 @@
           <th scope="col" class="<%= ui_table_th_class %>">Quantidade</th>
           <th scope="col" class="<%= ui_table_th_class %>">Preço</th>
           <th scope="col" class="<%= ui_table_th_class %>">Status</th>
-          <th scope="col" class="<%= ui_table_th_class(align: :right) %>">Ações</th>
+          <th scope="col" class="<%= ui_table_th_class %>">Ações</th>
         </tr>
       </thead>
       <tbody id="estoque_tbody" class="divide-y divide-gray-100">

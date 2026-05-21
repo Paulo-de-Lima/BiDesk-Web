@@ -1,13 +1,13 @@
 <%# locals: (cliente:) %>
 <% row_id = dom_id(cliente) %>
 <tr class="transition-colors hover:bg-emerald-50/30">
-  <td class="whitespace-nowrap px-6 py-4">
+  <td class="<%= ui_table_td_class %>">
     <button type="button"
         data-cliente-expand="<%= row_id %>"
         data-no-row-nav
         aria-expanded="false"
         aria-controls="<%= row_id %>-mesas"
-        class="group flex w-full items-center gap-2 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg -m-1 p-1">
+        class="group inline-flex w-full items-center justify-center gap-2 rounded-lg -m-1 p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600">
       <svg data-chevron class="h-4 w-4 shrink-0 text-emerald-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
       </svg>
@@ -19,9 +19,9 @@
       <% end %>
     </button>
   </td>
-  <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600"><%= cliente.telefone %></td>
-  <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600"><%= cliente.email.presence || "—" %></td>
-  <td class="whitespace-nowrap px-6 py-4 text-right">
+  <td class="<%= ui_table_td_class %> text-gray-600"><%= cliente.telefone %></td>
+  <td class="<%= ui_table_td_class %> text-gray-600"><%= cliente.email.presence || "—" %></td>
+  <td class="<%= ui_table_td_actions_class %>">
     <%= render "shared/table_actions",
         show_path: cliente_path(cliente),
         edit_path: edit_cliente_path(cliente),

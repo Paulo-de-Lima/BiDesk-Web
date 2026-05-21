@@ -1,0 +1,29 @@
+<%# locals: (produto:) %>
+<% ajuste_params = request.query_parameters.slice("busca", "categoria") %>
+<div class="inline-flex items-center gap-2" data-no-row-nav>
+  <div class="inline-flex items-center rounded-lg border border-gray-200 bg-gray-50/80 p-0.5 shadow-sm">
+    <%= button_to ajustar_quantidade_estoque_path(produto),
+        method: :patch,
+        params: ajuste_params.merge(delta: -1),
+        form: { class: "inline", data: { no_submit_loading: true } },
+        class: "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-gray-600 transition hover:bg-white hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent",
+        disabled: produto.quantidade.zero?,
+        aria: { label: "Diminuir quantidade de #{produto.nome}" } do %>
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+      </svg>
+    <% end %>
+    <span class="min-w-[2.25rem] px-1 text-center text-sm font-semibold tabular-nums text-gray-900"><%= produto.quantidade %></span>
+    <%= button_to ajustar_quantidade_estoque_path(produto),
+        method: :patch,
+        params: ajuste_params.merge(delta: 1),
+        form: { class: "inline", data: { no_submit_loading: true } },
+        class: "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-emerald-700 transition hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400",
+        aria: { label: "Aumentar quantidade de #{produto.nome}" } do %>
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+    <% end %>
+  </div>
+  <span class="text-xs text-gray-500">mín. <%= produto.valor_minimo %></span>
+</div>

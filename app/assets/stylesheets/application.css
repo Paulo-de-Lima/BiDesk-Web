@@ -72,6 +72,54 @@
   }
 }
 
+/* Painel de itens de estoque na manutenção */
+[data-manutencao-itens-row].manutencao-itens--open {
+  animation: cliente-mesas-fade 0.25s ease-out;
+}
+
+/* Dropdown de filtros (toolbar) */
+.filter-details__fields > .filter-details__field + .filter-details__field {
+  margin-top: 1.5rem;
+}
+
+.filter-details > summary {
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-details__chevron {
+  transition: transform 0.22s ease;
+}
+
+.filter-details[open] .filter-details__chevron {
+  transform: rotate(180deg);
+}
+
+.filter-details__panel {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    visibility 0.22s ease;
+  visibility: hidden;
+}
+
+.filter-details[open] .filter-details__panel {
+  animation: filter-details-panel-in 0.24s ease-out forwards;
+  visibility: visible;
+}
+
+@keyframes filter-details-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* Tela de login */
 .login-page-body {
   background: #e8eeea;

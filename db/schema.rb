@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_18_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_20_180000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -29,6 +29,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_120000) do
     t.text "observacoes"
     t.string "telefone"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "itens_manutencao", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "manutencao_id", null: false
+    t.decimal "preco_unitario", precision: 10, scale: 2
+    t.bigint "produto_id", null: false
+    t.integer "quantidade", default: 1, null: false
+    t.datetime "updated_at", null: false
+    t.index ["manutencao_id", "produto_id"], name: "index_itens_manutencao_on_manutencao_id_and_produto_id", unique: true
+    t.index ["manutencao_id"], name: "index_itens_manutencao_on_manutencao_id"
+    t.index ["produto_id"], name: "index_itens_manutencao_on_produto_id"
   end
 
   create_table "manutencaos", force: :cascade do |t|
@@ -74,5 +86,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_120000) do
     t.decimal "valor"
   end
 
+  add_foreign_key "itens_manutencao", "manutencaos"
+  add_foreign_key "itens_manutencao", "produtos"
   add_foreign_key "mesas_de_bilhar", "clientes"
 end

@@ -56,10 +56,8 @@ class DashboardController < ApplicationController
       .to_h
 
     @status_manutencoes = {
-      "Pendente"     => Manutencao.where(status: "pendente").count,
-      "Em andamento" => Manutencao.where(status: "em_andamento").count,
-      "Concluída"    => Manutencao.where(status: "concluida").count,
-      "Cancelada"    => Manutencao.where(status: "cancelada").count
+      "Pendente"  => Manutencao.where(status: "pendente").count,
+      "Concluída" => Manutencao.where(status: "concluida").count
     }
 
     @ultimas_transacoes = TransacaoFinanceira.recentes.limit(5)

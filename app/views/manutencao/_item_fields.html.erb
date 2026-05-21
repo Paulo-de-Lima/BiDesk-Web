@@ -1,0 +1,34 @@
+<%# locals: (f:, produtos:) %>
+<div class="rounded-lg border border-gray-200 bg-gray-50/50 p-4" data-manutencao-item-row>
+  <%= f.hidden_field :_destroy, value: "0", data: { manutencao_item_destroy: true } %>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto_auto] sm:items-end">
+    <div>
+      <% if f.object.persisted? %>
+        <%= f.label :produto_id, "Produto", class: ui_label_class %>
+        <p class="<%= ui_input_class %> bg-white text-gray-800"><%= f.object.produto&.nome %></p>
+        <%= f.hidden_field :produto_id %>
+      <% else %>
+        <%= f.label :produto_id, "Produto do estoque", class: ui_label_class %>
+        <%= f.select :produto_id,
+            options_for_select([ [ "Selecione um produto", "" ] ] + produto_options_para_manutencao(produtos), f.object.produto_id),
+            {},
+            { class: ui_select_class } %>
+      <% end %>
+    </div>
+    <div class="sm:w-28">
+      <%= f.label :quantidade, "Quantidade", class: ui_label_class %>
+      <%= f.number_field :quantidade, min: 1, class: ui_input_class, required: true %>
+    </div>
+    <div class="flex sm:justify-end sm:pb-0.5">
+      <button type="button"
+          data-manutencao-item-remove
+          class="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+          title="Remover linha">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+        Remover
+      </button>
+    </div>
+  </div>
+</div>

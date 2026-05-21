@@ -1,30 +1,14 @@
 <%# locals: (manutencoes:) %>
 <% if manutencoes.any? %>
   <% manutencoes.each do |manutencao| %>
-    <tr class="<%= "bg-amber-50/60 ring-1 ring-inset ring-amber-200" if manutencao.status == "pendente" %> <%= "bg-red-50/60 ring-1 ring-inset ring-red-200" if manutencao.status == "cancelada" %>">
-      <td class="whitespace-nowrap px-6 py-4 text-sm font-semibold text-gray-800"><%= manutencao.equipamento %></td>
-      <td class="px-6 py-4 text-sm text-gray-600"><%= truncate(manutencao.descricao, length: 50) %></td>
-      <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600"><%= format_date(manutencao.data) %></td>
-      <td class="whitespace-nowrap px-6 py-4">
-        <%= ui_status_badge(manutencao.status.humanize, variant: ui_manutencao_status_variant(manutencao.status)) %>
-      </td>
-      <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"><%= manutencao.custo ? format_currency(manutencao.custo) : "—" %></td>
-      <td class="whitespace-nowrap px-6 py-4 text-right">
-        <%= render "shared/table_actions",
-            show_path: manutencao_path(manutencao),
-            edit_path: edit_manutencao_path(manutencao),
-            destroy_path: manutencao_path(manutencao),
-            record_name: manutencao.equipamento,
-            use_modal: true %>
-      </td>
-    </tr>
+    <%= render "manutencao/row", manutencao: manutencao %>
   <% end %>
 <% else %>
   <tr>
     <td colspan="6">
       <%= render "shared/empty_state",
           title: "Nenhuma manutenção encontrada",
-          description: manutencao_filtros_ativos? ? "Tente outro status ou equipamento." : "Registre reparos e revisões das mesas e equipamentos.",
+          description: manutencao_filtros_ativos? ? "Tente outra busca ou ajuste os filtros." : "Registre reparos e revisões das mesas e equipamentos.",
           filtered: manutencao_filtros_ativos?,
           clear_path: manutencao_index_path,
           action_label: "Registrar manutenção",

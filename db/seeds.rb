@@ -73,7 +73,7 @@ end
 if Manutencao.none?
   manutencoes = [
     { equipamento: "Mesa 1", descricao: "Troca de tecido e nivelamento", data: Date.current - 15.days, status: "concluida", custo: 800.00, observacoes: "Manutenção preventiva realizada" },
-    { equipamento: "Mesa 2", descricao: "Reparo no sistema de bolsas", data: Date.current - 5.days, status: "em_andamento", custo: 350.00, observacoes: "Aguardando peças" },
+    { equipamento: "Mesa 2", descricao: "Reparo no sistema de bolsas", data: Date.current - 5.days, status: "pendente", custo: 350.00, observacoes: "Aguardando peças" },
     { equipamento: "Taco 5", descricao: "Troca de ponta", data: Date.current - 2.days, status: "concluida", custo: 25.00 },
     { equipamento: "Mesa 3", descricao: "Revisão geral", data: Date.current + 5.days, status: "pendente", observacoes: "Agendada para próxima semana" },
     { equipamento: "Iluminação", descricao: "Troca de lâmpadas", data: Date.current - 10.days, status: "concluida", custo: 120.00 }
@@ -82,6 +82,22 @@ if Manutencao.none?
   manutencoes.each { |manutencao_data| Manutencao.create!(manutencao_data) }
 
   puts "#{manutencoes.size} manutenções criadas"
+end
+
+if ItemManutencao.none? && Manutencao.any? && Produto.any?
+  giz = Produto.find_by(nome: "Giz para Taco")
+  taco = Produto.find_by(nome: "Taco de Bilhar")
+  mesa1 = Manutencao.find_by(equipamento: "Mesa 1")
+  mesa2 = Manutencao.find_by(equipamento: "Mesa 2")
+
+  if giz && mesa1
+    mesa1.itens_manutencao.create!(produto: giz, quantidade: 2)
+  end
+  if taco && mesa2
+    mesa2.itens_manutencao.create!(produto: taco, quantidade: 1)
+  end
+
+  puts "Itens de estoque vinculados às manutenções de exemplo"
 end
 
 puts "\n✅ Seeds executados com sucesso!" unless Rails.env.production?

@@ -1,4 +1,4 @@
-<%# locals: (manutencao:, modal: false) %>
+<%# locals: (manutencao:, modal: false, produtos: @produtos) %>
 <%= form_with model: manutencao, url: manutencao.persisted? ? manutencao_path(manutencao) : manutencao_index_path, class: "space-y-6" do |f| %>
   <%= render "shared/form_errors", record: manutencao %>
   <div>
@@ -16,7 +16,7 @@
     </div>
     <div>
       <%= f.label :status, "Status *", class: ui_label_class %>
-      <%= f.select :status, options_for_select([["Pendente", "pendente"], ["Em Andamento", "em_andamento"], ["Concluída", "concluida"], ["Cancelada", "cancelada"]], manutencao.status), {}, { class: ui_select_class, required: true } %>
+      <%= f.select :status, options_for_select(manutencao_status_opcoes, manutencao.status), {}, { class: ui_select_class, required: true } %>
     </div>
   </div>
   <div>
@@ -27,5 +27,14 @@
     <%= f.label :observacoes, "Observações", class: ui_label_class %>
     <%= f.text_area :observacoes, rows: 3, class: ui_input_class %>
   </div>
+
+  <% if produtos.any? %>
+    <%= render "manutencao/form_itens", f: f, produtos: produtos %>
+  <% else %>
+    <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+      Cadastre produtos no <strong>Estoque</strong> para vinculá-los às manutenções.
+    </div>
+  <% end %>
+
   <%= render "shared/form_actions", cancel_path: manutencao_index_path, submit_label: manutencao.persisted? ? "Atualizar" : "Salvar", modal: modal %>
 <% end %>
