@@ -1,4 +1,8 @@
 class Produto < ApplicationRecord
+  has_many :itens_manutencao,
+           class_name: "ItemManutencao",
+           dependent: :restrict_with_error
+
   validates :nome, presence: true
   validates :quantidade, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :preco, presence: true, numericality: { greater_than_or_equal_to: 0 }

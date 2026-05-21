@@ -1,37 +1,7 @@
 <%# locals: (produtos:) %>
 <% if produtos.any? %>
   <% produtos.each do |produto| %>
-    <tr class="<%= produto.estoque_baixo? ? "bg-red-50 ring-1 ring-inset ring-red-200" : "" %>">
-      <td class="px-6 py-4">
-        <span class="text-sm font-semibold text-gray-800"><%= produto.nome %></span>
-        <% if produto.descricao.present? %>
-          <p class="mt-0.5 text-sm text-gray-500"><%= truncate(produto.descricao, length: 50) %></p>
-        <% end %>
-      </td>
-      <td class="whitespace-nowrap px-6 py-4">
-        <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800"><%= produto.categoria || "Sem categoria" %></span>
-      </td>
-      <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
-        <span class="font-medium text-gray-900"><%= produto.quantidade %></span>
-        <span class="text-xs text-gray-500"> · mín. <%= produto.valor_minimo %></span>
-      </td>
-      <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"><%= format_currency(produto.preco) %></td>
-      <td class="whitespace-nowrap px-6 py-4">
-        <% if produto.estoque_baixo? %>
-          <%= ui_status_badge("Estoque crítico", variant: :critical) %>
-        <% else %>
-          <%= ui_status_badge("Normal", variant: :success) %>
-        <% end %>
-      </td>
-      <td class="whitespace-nowrap px-6 py-4 text-right">
-        <%= render "shared/table_actions",
-            show_path: estoque_path(produto),
-            edit_path: edit_estoque_path(produto),
-            destroy_path: estoque_path(produto),
-            record_name: produto.nome,
-            use_modal: true %>
-      </td>
-    </tr>
+    <%= render "row", produto: produto %>
   <% end %>
 <% else %>
   <tr>

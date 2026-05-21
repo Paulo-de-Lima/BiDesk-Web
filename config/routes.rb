@@ -26,8 +26,16 @@ Rails.application.routes.draw do
     collection do
       post :undo_destroy
     end
+    resources :itens, controller: "itens_manutencao", except: [ :index, :show ] do
+      collection do
+        post :undo_destroy
+      end
+    end
   end
   resources :estoque, path: "estoque" do
+    member do
+      patch :ajustar_quantidade
+    end
     collection do
       post :undo_destroy
     end

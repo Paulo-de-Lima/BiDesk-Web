@@ -117,21 +117,64 @@ document.addEventListener("turbo:before-fetch-response", (event) => {
   if (fetchResponse?.redirected) closeFormModal()
 })
 
-document.addEventListener("click", (event) => {
-  const toggle = event.target.closest("[data-cliente-expand]")
-  if (!toggle) return
-  event.preventDefault()
-  event.stopPropagation()
-
-  const clienteId = toggle.dataset.clienteExpand
-  const panel = document.getElementById(`${clienteId}-mesas`)
+function toggleExpandableRow(toggle, panelIdSuffix, openClass) {
+  const rowId = toggle.dataset.clienteExpand || toggle.dataset.manutencaoExpand
+  const panel = document.getElementById(`${rowId}${panelIdSuffix}`)
   if (!panel) return
 
   const isOpen = toggle.getAttribute("aria-expanded") === "true"
   toggle.setAttribute("aria-expanded", isOpen ? "false" : "true")
   panel.classList.toggle("hidden", isOpen)
-  panel.classList.toggle("cliente-mesas--open", !isOpen)
+  panel.classList.toggle(openClass, !isOpen)
   toggle.querySelector("[data-chevron]")?.classList.toggle("rotate-90", !isOpen)
+}
+
+document.addEventListener("click", (event) => {
+  const toggle = event.target.closest("[data-cliente-expand]")
+  if (!toggle) return
+  event.preventDefault()
+  event.stopPropagation()
+  toggleExpandableRow(toggle, "-mesas", "cliente-mesas--open")
+})
+
+document.addEventListener("click", (event) => {
+  const toggle = event.target.closest("[data-manutencao-expand]")
+  if (!toggle) return
+  event.preventDefault()
+  event.stopPropagation()
+  toggleExpandableRow(toggle, "-itens", "manutencao-itens--open")
+})
+
+document.addEventListener("click", (event) => {
+  const addBtn = event.target.closest("[data-manutencao-item-add]")
+  if (!addBtn) return
+  event.preventDefault()
+
+  const container = addBtn.closest("[data-manutencao-itens]")
+  const template = container?.querySelector("[data-manutencao-item-template]")
+  const list = container?.querySelector("[data-manutencao-itens-list]")
+  if (!template || !list) return
+
+  const index = Date.now()
+  list.insertAdjacentHTML("beforeend", template.innerHTML.replace(/NEW_RECORD/g, String(index)))
+})
+
+document.addEventListener("click", (event) => {
+  const removeBtn = event.target.closest("[data-manutencao-item-remove]")
+  if (!removeBtn) return
+  event.preventDefault()
+
+  const row = removeBtn.closest("[data-manutencao-item-row]")
+  if (!row) return
+
+  const destroyField = row.querySelector("[data-manutencao-item-destroy]")
+  const idField = row.querySelector("input[name*='[id]']")
+  if (idField?.value) {
+    if (destroyField) destroyField.value = "1"
+    row.classList.add("hidden")
+  } else {
+    row.remove()
+  }
 })
 
 document.addEventListener("keydown", (event) => {
@@ -243,7 +286,7 @@ document.addEventListener("click", (event) => {
 document.addEventListener("submit", (event) => {
   const form = event.target
   if (!(form instanceof HTMLFormElement)) return
-  if (form.dataset.confirmDeleteForm) return
+  if (form.dataset.confirmDeleteForm || form.dataset.noSubmitLoading) return
 
   const submit = form.querySelector("[type='submit']")
   if (!submit || submit.dataset.loading === "true") return

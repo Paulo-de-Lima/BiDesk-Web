@@ -1,0 +1,17 @@
+<% if modal_frame_request? %>
+  <%= render "shared/modal_response", icon: :edit, title: "Editar item", subtitle: "#{@item.produto.nome} — #{@manutencao.equipamento}" do %>
+    <%= render "form", item: @item, modal: true %>
+  <% end %>
+<% else %>
+  <% content_for :title, "Editar item | Manutenção | BiDesk" %>
+  <% ui_page_shell %>
+  <% ui_page_header(
+    breadcrumbs: [{ label: "Dashboard", path: root_path }, { label: "Manutenção", path: manutencao_index_path }, { label: @manutencao.equipamento }, { label: "Editar item" }],
+    title: "Editar quantidade",
+    subtitle: @item.produto.nome,
+    icon: :estoque
+  ) %>
+  <%= render layout: "shared/form_card" do %>
+    <%= render "form", item: @item, modal: false %>
+  <% end %>
+<% end %>

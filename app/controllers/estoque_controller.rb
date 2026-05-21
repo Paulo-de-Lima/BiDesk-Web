@@ -1,5 +1,5 @@
 class EstoqueController < ApplicationController
-  before_action :set_produto, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_produto, only: [ :show, :edit, :update, :destroy, :ajustar_quantidade ]
 
   def index
     @produtos = Produto.lista_filtrada(params)
@@ -46,6 +46,33 @@ class EstoqueController < ApplicationController
     render :edit, status: :unprocessable_entity
   end
 
+  def ajustar_quantidade
+    delta = params[:delta].to_i
+    unless delta.in?([ -1, 1 ])
+      head :unprocessable_entity
+      return
+    end
+
+    nova_quantidade = [ @produto.quantidade + delta, 0 ].max
+    unless @produto.update(quantidade: nova_quantidade)
+      head :unprocessable_entity
+      return
+    end
+
+    @produtos_baixo_estoque = Produto.baixo_estoque
+    filtros = params.permit(:busca, :categoria)
+
+    respond_to do |format|
+      format.turbo_stream do
+        flash.now[:notice] = delta.positive? ? "Quantidade aumentada." : "Quantidade diminuída."
+        render turbo_stream: estoque_quantidade_streams
+      end
+      format.html do
+        redirect_to estoque_index_path(filtros), notice: delta.positive? ? "Quantidade aumentada." : "Quantidade diminuída."
+      end
+    end
+  end
+
   def destroy
     session[:deleted_produto] = @produto.attributes.slice("nome", "categoria", "quantidade", "preco", "valor_minimo", "descricao")
     @produto.destroy
@@ -73,5 +100,13 @@ class EstoqueController < ApplicationController
 
   def produto_params
     params.require(:produto).permit(:nome, :categoria, :quantidade, :preco, :valor_minimo, :descricao)
+  end
+
+  def estoque_quantidade_streams
+    [
+      turbo_stream.replace(@produto, partial: "estoque/row", locals: { produto: @produto }),
+      turbo_stream.update("estoque-alerta-critico", partial: "estoque/alerta_critico", locals: { produtos_baixo_estoque: @produtos_baixo_estoque }),
+      turbo_stream.update("flash-messages", partial: "shared/flash")
+    ]
   end
 end

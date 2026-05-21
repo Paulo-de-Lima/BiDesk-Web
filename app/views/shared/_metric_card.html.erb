@@ -1,0 +1,44 @@
+<%# locals: (label:, accent:, icon_path:, value: nil, currency: nil, hint: nil, extra: nil, extra_color: nil, variation: nil, skeleton: false) %>
+<% style = ui_metric_accent_style(accent) %>
+<% is_currency = !currency.nil? %>
+<div class="metric-card relative flex min-h-[148px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br <%= style[:gradient] %> p-5 shadow-sm ring-1 ring-inset <%= style[:ring] %> border-l-4 <%= style[:border] %> transition hover:-translate-y-0.5 hover:shadow-md">
+  <% if skeleton %>
+    <div class="dashboard-card-skeleton absolute inset-0 hidden animate-pulse rounded-2xl bg-white p-6">
+      <div class="mb-3 h-4 w-1/2 rounded bg-gray-200"></div>
+      <div class="h-10 w-2/3 rounded bg-gray-200"></div>
+    </div>
+  <% end %>
+
+  <div class="<%= skeleton ? "dashboard-card-content" : "" %> flex h-full flex-col">
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0 flex-1">
+        <p class="text-xs font-medium uppercase tracking-wide text-gray-500"><%= label %></p>
+
+        <% if is_currency %>
+          <%= ui_metric_currency(currency, color_class: style[:value_color]) %>
+        <% else %>
+          <p class="<%= ui_metric_value_class(value, color_class: style[:value_color]) %>" title="<%= value %>"><%= value %></p>
+        <% end %>
+      </div>
+
+      <div class="<%= style[:icon_bg] %> shrink-0 rounded-xl p-2.5 shadow-sm">
+        <svg class="h-7 w-7 <%= style[:icon_color] %>" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= icon_path %>"></path>
+        </svg>
+      </div>
+    </div>
+
+    <% if variation || extra || hint %>
+      <div class="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 pt-2">
+        <% if variation %>
+          <%= variation_badge(variation) %>
+          <span class="text-xs text-gray-500">vs mês anterior</span>
+        <% elsif extra %>
+          <span class="text-xs font-medium <%= extra_color || "text-gray-500" %>"><%= extra %></span>
+        <% elsif hint %>
+          <span class="text-xs text-gray-500"><%= hint %></span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

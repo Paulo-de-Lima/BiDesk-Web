@@ -1,0 +1,9 @@
+<%# locals: (produtos_baixo_estoque:) %>
+<% if produtos_baixo_estoque.any? %>
+  <div class="mb-6 rounded-xl border-2 border-red-300 bg-red-50 p-4 shadow-sm ring-2 ring-red-100" role="alert">
+    <p class="flex flex-wrap items-center gap-2 text-sm font-semibold text-red-900">
+      <%= ui_status_badge("Atenção", variant: :critical) %>
+      <span><strong><%= produtos_baixo_estoque.count %></strong> produto(s) com estoque crítico (abaixo do mínimo). Reponha ou ajuste o estoque mínimo.</span>
+    </p>
+  </div>
+<% end %>

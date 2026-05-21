@@ -1,0 +1,31 @@
+<%# locals: (produto:) %>
+<tr id="<%= dom_id(produto) %>" class="<%= produto.estoque_baixo? ? "bg-red-50 ring-1 ring-inset ring-red-200" : "" %>">
+  <td class="<%= ui_table_td_class(wrap: true) %>">
+    <span class="font-semibold text-gray-800"><%= produto.nome %></span>
+    <% if produto.descricao.present? %>
+      <p class="mt-0.5 text-gray-500"><%= truncate(produto.descricao, length: 50) %></p>
+    <% end %>
+  </td>
+  <td class="<%= ui_table_td_class %>">
+    <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800"><%= produto.categoria || "Sem categoria" %></span>
+  </td>
+  <td class="<%= ui_table_td_class %> text-gray-600">
+    <%= render "quantidade_stepper", produto: produto %>
+  </td>
+  <td class="<%= ui_table_td_class %> font-medium text-gray-900"><%= format_currency(produto.preco) %></td>
+  <td class="<%= ui_table_td_class %>">
+    <% if produto.estoque_baixo? %>
+      <%= ui_status_badge("Estoque crítico", variant: :critical) %>
+    <% else %>
+      <%= ui_status_badge("Normal", variant: :success) %>
+    <% end %>
+  </td>
+  <td class="<%= ui_table_td_actions_class %>">
+    <%= render "shared/table_actions",
+        show_path: estoque_path(produto),
+        edit_path: edit_estoque_path(produto),
+        destroy_path: estoque_path(produto),
+        record_name: produto.nome,
+        use_modal: true %>
+  </td>
+</tr>

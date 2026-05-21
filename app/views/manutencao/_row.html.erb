@@ -1,0 +1,42 @@
+<%# locals: (manutencao:) %>
+<% row_id = dom_id(manutencao) %>
+<tr class="<%= "bg-amber-50/60 ring-1 ring-inset ring-amber-200" if manutencao.pendente? %> transition-colors hover:bg-emerald-50/20">
+  <td class="<%= ui_table_td_class %>">
+    <button type="button"
+        data-manutencao-expand="<%= row_id %>"
+        data-no-row-nav
+        aria-expanded="false"
+        aria-controls="<%= row_id %>-itens"
+        class="group inline-flex w-full items-center justify-center gap-2 rounded-lg -m-1 p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600">
+      <svg data-chevron class="h-4 w-4 shrink-0 text-emerald-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+      <span class="text-sm font-semibold text-gray-800 group-hover:text-emerald-800"><%= manutencao.equipamento %></span>
+      <% if manutencao.itens_manutencao.any? %>
+        <span class="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
+          <%= pluralize(manutencao.itens_manutencao.size, "item", "itens") %>
+        </span>
+      <% end %>
+    </button>
+  </td>
+  <td class="<%= ui_table_td_class(wrap: true) %> text-gray-600"><%= truncate(manutencao.descricao, length: 50) %></td>
+  <td class="<%= ui_table_td_class %> text-gray-600"><%= format_date(manutencao.data) %></td>
+  <td class="<%= ui_table_td_class %>">
+    <%= ui_status_badge(manutencao_status_label(manutencao.status), variant: ui_manutencao_status_variant(manutencao.status)) %>
+  </td>
+  <td class="<%= ui_table_td_class %> font-medium text-gray-900"><%= manutencao.custo ? format_currency(manutencao.custo) : "—" %></td>
+  <td class="<%= ui_table_td_actions_class %>">
+    <%= render "shared/table_actions",
+        show_path: manutencao_path(manutencao),
+        edit_path: edit_manutencao_path(manutencao),
+        destroy_path: manutencao_path(manutencao),
+        record_name: manutencao.equipamento,
+        use_modal: true,
+        confirm_detail: manutencao.itens_manutencao.any? ? "Os #{manutencao.itens_manutencao.size} item(ns) de estoque serão devolvidos ao estoque." : nil %>
+  </td>
+</tr>
+<tr id="<%= row_id %>-itens" data-manutencao-itens-row class="hidden bg-emerald-50/20">
+  <td colspan="6" class="px-6 py-4">
+    <%= render "manutencao/produtos_panel", manutencao: manutencao %>
+  </td>
+</tr>

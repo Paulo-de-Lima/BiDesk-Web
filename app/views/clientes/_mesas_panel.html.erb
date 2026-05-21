@@ -18,17 +18,17 @@
             <th scope="col" class="<%= ui_table_th_class(compact: true) %>">Ordem</th>
             <th scope="col" class="<%= ui_table_th_class(compact: true) %>">Numeração</th>
             <th scope="col" class="<%= ui_table_th_class(compact: true) %>">Registros</th>
-            <th scope="col" class="<%= ui_table_th_class(compact: true, align: :right) %>">Ações</th>
+            <th scope="col" class="<%= ui_table_th_class(compact: true) %>">Ações</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-50">
           <% cliente.mesas_de_bilhar.each do |mesa| %>
             <tr class="hover:bg-gray-50/80">
-              <td class="whitespace-nowrap px-4 py-2.5 font-medium text-gray-800">Mesa <%= mesa.ordem %></td>
-              <td class="whitespace-nowrap px-4 py-2.5 text-gray-600"><%= mesa.numeracao %></td>
-              <td class="whitespace-nowrap px-4 py-2.5 tabular-nums text-gray-900"><%= number_with_delimiter(mesa.registros, delimiter: ".") %></td>
-              <td class="whitespace-nowrap px-4 py-2.5 text-right" data-no-row-nav>
-                <div class="inline-flex items-center gap-1">
+              <td class="<%= ui_table_td_class(compact: true) %> font-medium text-gray-800">Mesa <%= mesa.ordem %></td>
+              <td class="<%= ui_table_td_class(compact: true) %> text-gray-600"><%= mesa.numeracao %></td>
+              <td class="<%= ui_table_td_class(compact: true) %> tabular-nums text-gray-900"><%= number_with_delimiter(mesa.registros, delimiter: ".") %></td>
+              <td class="<%= ui_table_td_actions_class(compact: true) %>" data-no-row-nav>
+                <div class="inline-flex items-center justify-center gap-1">
                   <%= link_to edit_cliente_mesa_path(cliente, mesa), class: "inline-flex rounded-lg p-1.5 text-amber-500 hover:bg-amber-50", title: "Editar", aria: { label: "Editar mesa #{mesa.numeracao}" }, data: ui_modal_data do %>
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                   <% end %>

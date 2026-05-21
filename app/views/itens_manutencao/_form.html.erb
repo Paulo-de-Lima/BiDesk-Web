@@ -1,0 +1,35 @@
+<% modal = local_assigns.fetch(:modal, false) %>
+<%= form_with model: [ @manutencao, item ],
+    url: item.persisted? ? manutencao_item_path(@manutencao, item) : manutencao_itens_path(@manutencao),
+    class: "space-y-6" do |f| %>
+  <%= render "shared/form_errors", record: item, title: "Não foi possível salvar:" %>
+
+  <p class="text-sm text-gray-600">
+    Manutenção: <strong class="text-gray-900"><%= @manutencao.equipamento %></strong>
+  </p>
+
+  <% if item.persisted? %>
+    <div>
+      <%= f.label :produto_id, "Produto", class: ui_label_class %>
+      <p class="<%= ui_input_class %> bg-gray-50 text-gray-800"><%= item.produto.nome %></p>
+    </div>
+  <% else %>
+    <div>
+      <%= f.label :produto_id, "Produto do estoque *", class: ui_label_class %>
+      <%= f.select :produto_id,
+          options_for_select([ [ "Selecione um produto", "" ] ] + produto_options_para_manutencao(@produtos), item.produto_id),
+          {},
+          { class: ui_select_class, required: true } %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :quantidade, "Quantidade *", class: ui_label_class %>
+    <%= f.number_field :quantidade, min: 1, class: ui_input_class, required: true %>
+    <% if item.persisted? %>
+      <p class="mt-1 text-xs text-gray-500">Estoque atual: <%= item.produto.quantidade %> un. (após salvar, o estoque será ajustado pela diferença).</p>
+    <% end %>
+  </div>
+
+  <%= render "shared/form_actions", cancel_path: manutencao_index_path, submit_label: item.persisted? ? "Atualizar" : "Adicionar", modal: modal %>
+<% end %>

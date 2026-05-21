@@ -1,6 +1,6 @@
 <%# locals: (show_path:, edit_path:, destroy_path:, record_name:, confirm_detail: nil, use_modal: false) %>
 <% delete_message = "Você está prestes a excluir «#{record_name}».#{" #{confirm_detail}" if confirm_detail.present?} Você poderá desfazer logo após confirmar." %>
-<div class="inline-flex items-center justify-end gap-1" data-no-row-nav>
+<div class="inline-flex items-center justify-center gap-1" data-no-row-nav>
   <%= link_to show_path,
       class: "inline-flex rounded-lg p-2 text-blue-500 hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
       title: "Visualizar",

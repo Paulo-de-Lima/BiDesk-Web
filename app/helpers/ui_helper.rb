@@ -6,7 +6,45 @@ module UiHelper
     financeiro: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
     manutencao: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z",
     mesa: "M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z",
-    plus: "M12 6v6m0 0v6m0-6h6m-6 0H6"
+    plus: "M12 6v6m0 0v6m0-6h6m-6 0H6",
+    check: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
+    arrow_up: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6",
+    arrow_down: "M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
+  }.freeze
+
+  METRIC_ACCENT_STYLES = {
+    emerald: {
+      border: "border-l-emerald-500",
+      gradient: "from-emerald-50 via-white to-white",
+      icon_bg: "bg-emerald-100",
+      icon_color: "text-emerald-600",
+      value_color: "text-emerald-700",
+      ring: "ring-emerald-100"
+    },
+    red: {
+      border: "border-l-red-500",
+      gradient: "from-red-50 via-white to-white",
+      icon_bg: "bg-red-100",
+      icon_color: "text-red-600",
+      value_color: "text-red-600",
+      ring: "ring-red-100"
+    },
+    amber: {
+      border: "border-l-amber-500",
+      gradient: "from-amber-50 via-white to-white",
+      icon_bg: "bg-amber-100",
+      icon_color: "text-amber-600",
+      value_color: "text-amber-700",
+      ring: "ring-amber-100"
+    },
+    neutral: {
+      border: "border-l-gray-400",
+      gradient: "from-gray-50 via-white to-white",
+      icon_bg: "bg-gray-100",
+      icon_color: "text-gray-600",
+      value_color: "text-gray-900",
+      ring: "ring-gray-100"
+    }
   }.freeze
 
   def ui_page_shell
@@ -34,8 +72,12 @@ module UiHelper
   end
 
   # Cabeçalhos de tabela — mesmo verde da navbar (bg-emerald-800)
-  def ui_table_th_class(align: :left, compact: false, dense: false)
-    align_class = align == :right ? "text-right" : "text-left"
+  def ui_table_th_class(align: :center, compact: false, dense: false)
+    align_class = case align
+    when :right then "text-right"
+    when :left then "text-left"
+    else "text-center"
+    end
     size = if compact
       "px-4 py-2.5 tracking-wide"
     elsif dense
@@ -44,6 +86,22 @@ module UiHelper
       "px-6 py-4 tracking-wider"
     end
     "#{size} #{align_class} text-xs font-semibold uppercase text-emerald-800"
+  end
+
+  def ui_table_td_class(compact: false, dense: false, wrap: false)
+    pad = if compact
+      "px-4 py-2.5"
+    elsif dense
+      "px-6 py-3"
+    else
+      "px-6 py-4"
+    end
+    wrap_class = wrap ? "" : "whitespace-nowrap "
+    "#{wrap_class}#{pad} text-center text-sm"
+  end
+
+  def ui_table_td_actions_class(compact: false)
+    ui_table_td_class(compact: compact)
   end
 
   def ui_badge_count(text)
@@ -109,6 +167,10 @@ module UiHelper
     }
   end
 
+  def ui_metric_accent_style(accent)
+    METRIC_ACCENT_STYLES.fetch(accent.to_sym)
+  end
+
   def ui_metric_value_class(value, color_class: "text-gray-900")
     length = value.to_s.gsub(/\s/, "").length
     size = case length
@@ -156,14 +218,30 @@ module UiHelper
   def ui_manutencao_status_variant(status)
     case status
     when "pendente" then :warning
-    when "cancelada" then :critical
     when "concluida" then :success
     else :neutral
     end
   end
 
-  def ui_filter_submit
-    submit_tag "Filtrar", class: "inline-flex shrink-0 items-center rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
+  def ui_filter_details_summary_class(active: false)
+    base = "inline-flex cursor-pointer list-none items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-emerald-800 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50/50 marker:content-none focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
+    active ? "#{base} ring-2 ring-emerald-500/30" : base
+  end
+
+  def ui_filter_details_panel_class
+    "filter-details__panel absolute right-0 z-20 mt-2 w-80 origin-top-right rounded-xl border border-gray-200 bg-white p-5 shadow-lg"
+  end
+
+  def ui_filter_section_label_class
+    "text-xs font-semibold uppercase tracking-wide text-emerald-800"
+  end
+
+  def ui_filter_fields_stack_class
+    "filter-details__fields flex flex-col"
+  end
+
+  def ui_filter_clear_wrapper_class
+    "mt-5 border-t border-gray-100 pt-4"
   end
 
   def ui_icon_path(name)
